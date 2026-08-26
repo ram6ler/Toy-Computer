@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+[project]
+name = "toy_computer"
+version = "0.5.0"
+authors = [{ name = "Richard Nathan Ambler", email = "rambler@wya.top" }]
+description = "An implementation of Sedgewick & Wayne's Toy Computer and a simple Toy assembler."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.12"
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Intended Audience :: Education",
+  "Typing :: Typed",
+]
+keywords = [
+  "assembly",
+  "machine language",
+  "Sedgewick",
+  "Wayne",
+  "toy computer",
+]
+dependencies = ["prompt_toolkit>3.0"]
+
+[project.urls]
+Homepage = "https://github.com/ram6ler/Toy-Computer-Assembler"
+Issues = "https://github.com/ram6ler/Toy-Computer-Assembler/issues"
+
+[tool.setuptools.package-data]
+"toy_computer" = ["py.typed"]

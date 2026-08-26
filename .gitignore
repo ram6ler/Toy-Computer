@@ -1,0 +1,9 @@
+.vscode
+
+.DS_Store/
+
+ignore/
+
+__pycache__/
+
+toy_computer.egg-info/
