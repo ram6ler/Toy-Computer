@@ -14,7 +14,7 @@ that provides a simulator for the specified machine as well as a simple assembly
 Install directly from this repository (for Python ≥ 3.12):
 
 ```txt
-pip install git+https://github.com/ram6ler/Toy-Computer-Assembler.git@main
+pip install git+https://github.com/ram6ler/Toy-Computer.git@main
 ```
 
 
@@ -976,4 +976,4 @@ I win!
 
 ## Thanks
 
-Thanks for your interest in this project! If you like, [submit bug reports or requests here](https://github.com/ram6ler/Toy-Computer-Assembler/issues)!
+Thanks for your interest in this project! If you like, [submit bug reports or requests here](https://github.com/ram6ler/Toy-Computer/issues)!
