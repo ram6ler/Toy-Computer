@@ -56,7 +56,7 @@ if __name__ == "__main__":
 
   For further details, see:
 
-    https://github.com/ram6ler/Toy-Computer-Assembler
+    https://github.com/ram6ler/Toy-Computer
 """
         )
 
