@@ -691,7 +691,7 @@ $ python -m toy_computer
 
   For further details, see:
 
-    https://github.com/ram6ler/Toy-Computer-Assembler
+    https://github.com/ram6ler/Toy-Computer
 
 > <strong>00: 4865</strong>
   M[00] 0000 -> 4865
