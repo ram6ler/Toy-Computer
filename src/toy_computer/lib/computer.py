@@ -352,7 +352,7 @@ class Computer:
         while not self._halted:
             self.fetch_and_execute()
 
-    def reset(self) -> None:
+    def clear(self) -> None:
         """
         Clears the registers and resets the PC.
         """
@@ -361,12 +361,12 @@ class Computer:
         self.pc = self._initial_pc
         self._halted = False
 
-    def clear(self) -> None:
+    def erase(self) -> None:
         """
         Clears the registers, PC and RAM.
         """
         self._initial_pc = 0
-        self.reset()
+        self.clear()
         for r in self.ram:
             r.update(bytes([0, 0]))
 
@@ -374,7 +374,7 @@ class Computer:
         """
         Clears the computer and loads program specified by `code`.
         """
-        self.reset()
+        self.clear()
         pc, instructions = data_from_machine_code(code)
         self._initial_pc = self.pc = pc
         for i, instruction in enumerate(instructions):

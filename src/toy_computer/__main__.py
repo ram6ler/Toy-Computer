@@ -31,13 +31,14 @@ if __name__ == "__main__":
     def banner():
         print(
             r"""
-            .-------..-------..--. .--.
-            |       ||       ||  | |  |
-            '-.   .-'|  .-.  ||  '-'  |
-              |   |  |  | |  ||       |
-              |   |  |  '-'  |'-.   .-'
-              |   |  |       |  |   |
-              '---'  '-------'  '---'
+            ┌───────┐┌───────┐┌──┐ ┌──┐
+            │       ││       ││  │ │  │
+            └─┐   ┌─┘│  ┌─┐  ││  └─┘  │
+              │   │  │  │ │  ││       │
+              │   │  │  └─┘  │└─┐   ┌─┘
+              │   │  │       │  │   │
+              └───┘  └───────┘  └───┘
+           C   O   M   P   U   T   E   R 
           """
         )
         print(
@@ -47,7 +48,7 @@ if __name__ == "__main__":
     Sedgewick, R. & Wayne, K. (2017)
     Computer Science: An Interdisciplinary Approach
 
-  This implementation (and Toy Assembly) was created by
+  This implementation and Toy Assembly were created by
   Richard Ambler for use in computer science courses at
   Beijing World Youth Academy.
 
@@ -86,7 +87,8 @@ if __name__ == "__main__":
                     print(f"  Compiled {path} as assembly.")
                     print(
                         "\n".join(
-                            f"  {line}" for line in assembled.lookup_table.split("\n")
+                            f"  {line}"
+                            for line in assembled.lookup_table.split("\n")
                         )
                     )
                     print(f"  PC: {hex(computer.pc)[2:].rjust(2, '0')}")
@@ -103,7 +105,7 @@ if __name__ == "__main__":
         def run_program():
             lineate("Run Started")
             try:
-                computer.reset()
+                computer.clear()
                 computer.run()
                 print()
                 lineate("Run Ended")
@@ -125,37 +127,37 @@ if __name__ == "__main__":
                         r"""
   To use:
 
-  (h)elp              Display this help message.
+  help                Display this help message.
     
-  (l)oad [p]          Compile and load a machine language or
+  load [p]            Compile and load a machine language or
                       assembly language file p. (If .asm is
                       contained in the file name the language
                       is assumed to be assembly.) If no path is
                       provided, re-compile loaded file.
   
-  (r)un               Run the program from the current position.
+  run                 Run the program from the current position.
   
-  (d)ump [p]          Output the memory and register data. If a path is
+  dump [p]            Output the memory and register data. If a path is
                       added, save dump to path p.
   
-  (m)achine [p]       Output the current state as machine language. If
+  machine [p]         Output the current state as machine language. If
                       a path is added, save machine language to path p.
   
-  (s)tep              Step through one fetch-decode-execute cycle.
+  step                Step through one fetch-decode-execute cycle.
   
-  (c)lear             Reset computer to original loaded state.
+  clear               Reset computer to original loaded state.
   
-  (e)rase             Clear registers and memory.
+  erase               Clear registers and memory.
   
-  (f)ormat [p]        Saves loaded assembly as formatted html to path p. 
+  format [p]          Saves loaded assembly as formatted html to path p. 
   
-  (q)uit              Quit.
+  quit                Quit.
   
   PC: {addr}          Set the program counter to address addr. (addr 
-                      expected to be in hexadecimal.)
+                      expected in hexadecimal.)
   
   {addr}: {val}       Write value val to one-byte memory address addr.
-                      (Both addr and val are expected to be in hexadecimal.)
+                      (addr and val expected in hexadecimal.)
       """
                     )
 
@@ -163,14 +165,14 @@ if __name__ == "__main__":
                     load_path(path)
 
                 case ["clear"] | ["c"]:
-                    computer.reset()
+                    computer.clear()
                     print("Cleared to original state.")
 
                 case ["run"] | ["r"]:
                     run_program()
 
                 case ["erase"] | ["e"]:
-                    computer.clear()
+                    computer.erase()
                     print("All data erased.")
 
                 case ["step"] | ["s"]:
@@ -207,7 +209,8 @@ if __name__ == "__main__":
                     else:
                         print(
                             "\n".join(
-                                f"  {line}" for line in computer.breakdown.split("\n")
+                                f"  {line}"
+                                for line in computer.breakdown.split("\n")
                             )
                         )
 
@@ -263,7 +266,9 @@ if __name__ == "__main__":
                             )
                             continue
                         if v < 0 or v > 0xFFFF:
-                            print(f"  Value {hex(v)} cannot be stored in two bytes...")
+                            print(
+                                f"  Value {hex(v)} cannot be stored in two bytes..."
+                            )
                             continue
                         print(
                             f"  M[{hex(a)[2:].rjust(2, '0')}] "
@@ -280,7 +285,9 @@ if __name__ == "__main__":
                         )
 
                 case _:
-                    print("  Not understood. Input 'help' for available instructions.")
+                    print(
+                        "  Not understood. Input 'help' for available instructions."
+                    )
 
     if len(argv) == 1:
         try:
