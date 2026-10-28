@@ -65,10 +65,10 @@ Input is achieved by setting the originally unused S nibble in a load-indirect i
 |   S   | Side effect                                                                          |
 | :---: | :----------------------------------------------------------------------------------- |
 |   0   | Load indirect (default; same as original specification).                                                             |
-|   1   | Loads a signed integer from stdin to nibble D.                                     |
-|   2   | Loads an unsigned integer from stdin to nibble D.                                  |
-|   3   | Writes a string as compressed ascii to memory starting at the address in nibble D. |
-|   4   | Loads a random sequence of bits to nibble D.                                       |
+|   1   | Loads a signed integer from stdin to R[D].                                     |
+|   2   | Loads an unsigned integer from stdin to R[D].                                  |
+|   3   | Writes a string as compressed ascii to memory starting at the address in R[D]. |
+|   4   | Loads a random sequence of bits to R[D].                                       |
 
 ### Output
 
@@ -77,18 +77,18 @@ Output is achieved by setting the originally unused S nibble in a store-indirect
 |   S   | Side effect                                                                                      |
 | :---: | :----------------------------------------------------------------------------------------------- |
 |   0   | Store indirect (default; same as original specification).                                                                        |
-|   1   | Writes value in nibble D to stdout as a signed denary value.                                            |
-|   2   | Writes value in nibble D to stdout as an unsigned denary value.                                         |
-|   3   | Writes value in nibble D to stdout as a signed binary value.                                            |
-|   4   | Writes value in nibble D to stdout as an unsigned binary value.                                         |
-|   5   | Writes value in nibble D to stdout as a signed octal value.                                             |
-|   6   | Writes value in nibble D to stdout as an unsigned octal value.                                          |
-|   7   | Writes value in nibble D to stdout as a signed hexadecimal value.                                       |
-|   8   | Writes value in nibble D to stdout as an unsigned hexadecimal value.                                    |
-|   9   | Writes value in nibble D to stdout as a binary pattern (e.g. for sprites).                              |
-|   a   | Writes value in nibble D to stdout as ascii characters.                                                 |
+|   1   | Writes value in R[D] to stdout as a signed denary value.                                            |
+|   2   | Writes value in R[D] to stdout as an unsigned denary value.                                         |
+|   3   | Writes value in R[D] to stdout as a signed binary value.                                            |
+|   4   | Writes value in R[D] to stdout as an unsigned binary value.                                         |
+|   5   | Writes value in R[D] to stdout as a signed octal value.                                             |
+|   6   | Writes value in R[D] to stdout as an unsigned octal value.                                          |
+|   7   | Writes value in R[D] to stdout as a signed hexadecimal value.                                       |
+|   8   | Writes value in R[D] to stdout as an unsigned hexadecimal value.                                    |
+|   9   | Writes value in R[D] to stdout as a binary pattern (e.g. for sprites).                              |
+|   a   | Writes value in R[D] to stdout as ascii characters.                                                 |
 |   b   | Writes a new line to stdout.                                                                     |
-|   c   | Writes the string in memory starting at address in nibble D to stdout (with `\0` as terminator). |
+|   c   | Writes the string in memory starting at address in R[D] to stdout (with `\0` as terminator). |
 
 
 ## Machine Language
