@@ -4,7 +4,8 @@ if __name__ == "__main__":
 
     from .lib.exception import ToyException
     from .lib.computer import Computer
-    from .lib.assembler import assemble, format_assembly
+    from .lib.assembler import assemble
+    from .lib.format import format_assembly
 
     from prompt_toolkit import PromptSession
     from prompt_toolkit.completion import PathCompleter, NestedCompleter
@@ -149,7 +150,7 @@ if __name__ == "__main__":
   
   erase               Clear registers and memory.
   
-  format [p]          Saves loaded assembly as formatted html to path p. 
+  format s d          Saves assembly file at path s as formatted html to path d. 
   
   quit                Quit.
   

@@ -1,0 +1,121 @@
+
+        <pre class="toy_computer">
+            <style>
+                .toy_computer {
+                    font-size: 12pt;
+                    font-family: 'IBM Plex Mono', monospace;
+                }
+                .toy_computer .label_header {
+                    line-height: 0.4em;
+                    font-weight: bold;
+                }
+                .toy_computer .line {
+                    padding-left: 2em;
+                    line-height: 0.4em;
+                }
+                .toy_computer .value {
+                    color: black;
+                }
+            
+                .toy_computer .string {
+                    color: orangered;
+                }
+
+                .toy_computer .sl_comment {
+                    line-height: 0.4em;
+                }
+            
+                .toy_computer .comment {
+                    color: gray;
+                }
+            
+                .toy_computer .label {
+                    color: green;
+                }
+            
+                .toy_computer .keyword {
+                    color: blue;
+                    font-weight: bold;
+                }
+            
+                .toy_computer .special {
+                    color: blue;
+                }
+            
+                .toy_computer .register {
+                    color: darkviolet;
+                }
+
+                .toy_computer .main {
+                    font-weight: bold;
+                    padding: 0.2em;
+                    background-color: lightgoldenrodyellow;
+                }
+            </style>
+        <div class="label_header"><span class="label">intro_1</span>:</div>
+<div class="line"><span class="special">.ascii</span> <span class="string">"I'm thinking of a number from 0 to 255."</span> </div>
+<div class="label_header"><span class="label">intro_2</span>:</div>
+<div class="line"><span class="special">.ascii</span> <span class="string">"Try to guess it in the least number of guesses."</span> </div>
+<div class="label_header"><span class="label">guess_no</span>:</div>
+<div class="line"><span class="special">.ascii</span> <span class="string">"Guess number: "</span> </div>
+<div class="label_header"><span class="label">prompt</span>:</div>
+<div class="line"><span class="special">.ascii</span> <span class="string">"What is your guess? "</span> </div>
+<div class="label_header"><span class="label">too_high</span>:</div>
+<div class="line"><span class="special">.ascii</span> <span class="string">"Too high! "</span> </div>
+<div class="label_header"><span class="label">too_low</span>:</div>
+<div class="line"><span class="special">.ascii</span> <span class="string">"Too low! "</span> </div>
+<div class="label_header"><span class="label">try</span>:</div>
+<div class="line"><span class="special">.ascii</span> <span class="string">"Try again!"</span> </div>
+<div class="label_header"><span class="label">correct_1</span>:</div>
+<div class="line"><span class="special">.ascii</span> <span class="string">"Congratulations! You got it in "</span> </div>
+<div class="label_header"><span class="label">correct_2</span>:</div>
+<div class="line"><span class="special">.ascii</span> <span class="string">" guesses!"</span> </div>
+<div class="label_header"><span class="label">again</span>:</div>
+<div class="line"><span class="special">.ascii</span> <span class="string">"Play again (y/n)? "</span> </div>
+<div class="label_header"><span class="label">bye</span>:</div>
+<div class="line"><span class="special">.ascii</span> <span class="string">"Bye!"</span> </div>
+<div class="line"><span class="main">.main</span> </div>
+<div class="label_header"><span class="label">start</span>:</div>
+<div class="line"><span class="special">.input_u</span> <span class="register">%0</span> </div>
+<div class="line"><span class="keyword">and</span> <span class="register">%0</span> <span class="value">0xff</span> <span class="comment">// %0 secret number</span></div>
+<div class="line"><span class="special">.write</span> [<span class="label">intro_1</span>] </div>
+<div class="line"><span class="special">.line</span></div>
+<div class="line"><span class="special">.write</span> [<span class="label">intro_2</span>] </div>
+<div class="line"><span class="special">.line</span></div>
+<div class="line"><span class="keyword">mv</span> <span class="register">%1</span> <span class="value">0</span> <span class="comment">// %1 guesses</span></div>
+<div class="label_header"><span class="label">loop</span>:</div>
+<div class="line"><span class="keyword">add</span> <span class="register">%1</span> <span class="value">1</span> </div>
+<div class="line"><span class="special">.write</span> [<span class="label">guess_no</span>] </div>
+<div class="line"><span class="special">.den</span> <span class="register">%1</span> </div>
+<div class="line"><span class="special">.line</span></div>
+<div class="line"><span class="special">.write</span> [<span class="label">prompt</span>] </div>
+<div class="line"><span class="special">.input</span> <span class="register">%2</span> <span class="comment">// %2 guess</span></div>
+<div class="line"><span class="keyword">je</span> <span class="register">%0</span> <span class="register">%2</span> <span class="label">win</span> </div>
+<div class="line"><span class="keyword">sub</span> <span class="register">%3</span> <span class="register">%0</span> <span class="register">%2</span> </div>
+<div class="line"><span class="keyword">jn</span> <span class="register">%3</span> <span class="label">if_too_high</span> </div>
+<div class="line"><span class="special">.write</span> [<span class="label">too_low</span>] </div>
+<div class="line"><span class="keyword">jmp</span> <span class="label">end_loop</span> </div>
+<div class="label_header"><span class="label">if_too_high</span>:</div>
+<div class="line"><span class="special">.write</span> [<span class="label">too_high</span>] </div>
+<div class="label_header"><span class="label">end_loop</span>:</div>
+<div class="line"><span class="special">.write</span> [<span class="label">try</span>] </div>
+<div class="line"><span class="special">.line</span></div>
+<div class="line"><span class="keyword">jmp</span> <span class="label">loop</span> </div>
+<div class="label_header"><span class="label">win</span>:</div>
+<div class="line"><span class="special">.write</span> [<span class="label">correct_1</span>] </div>
+<div class="line"><span class="special">.den</span> <span class="register">%1</span> </div>
+<div class="line"><span class="special">.write</span> [<span class="label">correct_2</span>] </div>
+<div class="line"><span class="special">.line</span></div>
+<div class="line"><span class="special">.write</span> [<span class="label">again</span>] </div>
+<div class="line"><span class="keyword">mv</span> <span class="register">%4</span> <span class="label">response</span> </div>
+<div class="line"><span class="special">.input_u</span> [<span class="register">%4</span>] </div>
+<div class="line"><span class="keyword">ld</span> <span class="register">%4</span> [<span class="register">%4</span>] </div>
+<div class="line"><span class="keyword">rsh</span> <span class="register">%4</span> <span class="value">8</span> </div>
+<div class="line"><span class="keyword">xor</span> <span class="register">%4</span> <span class="value">'y'</span> </div>
+<div class="line"><span class="keyword">jz</span> <span class="register">%4</span> <span class="label">start</span> </div>
+<div class="label_header"><span class="label">done</span>:</div>
+<div class="line"><span class="special">.write</span> [<span class="label">bye</span>] </div>
+<div class="line"><span class="special">.line</span></div>
+<div class="line"><span class="keyword">halt</span> </div>
+<div class="label_header"><span class="label">response</span>:</div>
+<div class="line"><span class="special">.word</span> </div></pre>

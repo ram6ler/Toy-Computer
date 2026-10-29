@@ -1,4 +1,4 @@
-from .language import expressions, SUBSTITUTION, STRING_EXPRESSION
+from .language import EXPRESSIONS, SUBSTITUTION, STRING_EXPRESSION
 from .word import Word
 from .helpers import parse_to_int
 from .exception import ToyException
@@ -142,11 +142,11 @@ def assemble(assembly: str) -> Assembled:
     lookup_table = dict[str, int]()
 
     for line in lines:
-        if m := expressions[".main"].match(line):
+        if m := EXPRESSIONS[".main"].match(line):
             update_pc(len(ram))
             continue
 
-        if m := expressions[".input d"].match(line):
+        if m := EXPRESSIONS[".input d"].match(line):
             d = m.group("d")
             ram.append(
                 # R[d] <- input
@@ -154,7 +154,7 @@ def assemble(assembly: str) -> Assembled:
             )
             continue
 
-        if m := expressions[".input [t]"].match(line):
+        if m := EXPRESSIONS[".input [t]"].match(line):
             t = m.group("t")
             ram.extend(
                 [
@@ -166,7 +166,7 @@ def assemble(assembly: str) -> Assembled:
             )
             continue
 
-        if m := expressions[".input [lab]"].match(line):
+        if m := EXPRESSIONS[".input [lab]"].match(line):
             lab = m.group("lab")
             ram.extend(
                 [
@@ -180,7 +180,7 @@ def assemble(assembly: str) -> Assembled:
             )
             continue
 
-        if m := expressions[".input_u d"].match(line):
+        if m := EXPRESSIONS[".input_u d"].match(line):
             d = m.group("d")
             ram.append(
                 # R[d] <- input_dat
@@ -188,7 +188,7 @@ def assemble(assembly: str) -> Assembled:
             )
             continue
 
-        if m := expressions[".input_u [t]"].match(line):
+        if m := EXPRESSIONS[".input_u [t]"].match(line):
             t = m.group("t")
             ram.extend(
                 [
@@ -200,7 +200,7 @@ def assemble(assembly: str) -> Assembled:
             )
             continue
 
-        if m := expressions[".input_u [lab]"].match(line):
+        if m := EXPRESSIONS[".input_u [lab]"].match(line):
             lab = m.group("lab")
             ram.extend(
                 [
@@ -214,7 +214,7 @@ def assemble(assembly: str) -> Assembled:
             )
             continue
 
-        if m := expressions[".input_str [d]"].match(line):
+        if m := EXPRESSIONS[".input_str [d]"].match(line):
             d = m.group("d")
             ram.append(
                 # M[R[d]...] <- input_str
@@ -222,7 +222,7 @@ def assemble(assembly: str) -> Assembled:
             )
             continue
 
-        if m := expressions[".input_str [lab]"].match(line):
+        if m := EXPRESSIONS[".input_str [lab]"].match(line):
             lab = m.group("lab")
             ram.extend(
                 [
@@ -234,7 +234,7 @@ def assemble(assembly: str) -> Assembled:
             )
             continue
 
-        if m := expressions[".rand d"].match(line):
+        if m := EXPRESSIONS[".rand d"].match(line):
             d = m.group("d")
             ram.append(
                 # R[d] <- rand
@@ -242,7 +242,7 @@ def assemble(assembly: str) -> Assembled:
             )
             continue
 
-        if m := expressions[".rand [t]"].match(line):
+        if m := EXPRESSIONS[".rand [t]"].match(line):
             t = m.group("t")
             ram.extend(
                 [
@@ -254,7 +254,7 @@ def assemble(assembly: str) -> Assembled:
             )
             continue
 
-        if m := expressions[".rand [lab]"].match(line):
+        if m := EXPRESSIONS[".rand [lab]"].match(line):
             lab = m.group("lab")
             ram.extend(
                 [
@@ -268,7 +268,7 @@ def assemble(assembly: str) -> Assembled:
             )
             continue
 
-        if m := expressions["fmt d"].match(line):
+        if m := EXPRESSIONS["fmt d"].match(line):
             fmt = m.group("fmt")
             d = m.group("d")
             s = get_format_value(fmt)
@@ -278,7 +278,7 @@ def assemble(assembly: str) -> Assembled:
             )
             continue
 
-        if m := expressions["fmt [t]"].match(line):
+        if m := EXPRESSIONS["fmt [t]"].match(line):
             fmt = m.group("fmt")
             t = m.group("t")
             s = get_format_value(fmt)
@@ -292,7 +292,7 @@ def assemble(assembly: str) -> Assembled:
             )
             continue
 
-        if m := expressions["fmt [lab]"].match(line):
+        if m := EXPRESSIONS["fmt [lab]"].match(line):
             fmt = m.group("fmt")
             lab = m.group("lab")
             s = get_format_value(fmt)
@@ -308,14 +308,14 @@ def assemble(assembly: str) -> Assembled:
             )
             continue
 
-        if m := expressions[".line"].match(line):
+        if m := EXPRESSIONS[".line"].match(line):
             ram.append(
                 # line
                 "b0b0",
             )
             continue
 
-        if m := expressions[".write [d]"].match(line):
+        if m := EXPRESSIONS[".write [d]"].match(line):
             d = m.group("d")
             ram.append(
                 # write <- M[R[d]...]
@@ -323,7 +323,7 @@ def assemble(assembly: str) -> Assembled:
             )
             continue
 
-        if m := expressions[".write [lab]"].match(line):
+        if m := EXPRESSIONS[".write [lab]"].match(line):
             lab = m.group("lab")
             ram.extend(
                 [
@@ -335,16 +335,16 @@ def assemble(assembly: str) -> Assembled:
             )
             continue
 
-        if m := expressions["lab:"].match(line):
+        if m := EXPRESSIONS["lab:"].match(line):
             lab = m.group("lab")
             lookup_table[lab] = len(ram)
             continue
 
-        if m := expressions[".word"].match(line):
+        if m := EXPRESSIONS[".word"].match(line):
             ram.append("0000")
             continue
 
-        if m := expressions[".data data"].match(line):
+        if m := EXPRESSIONS[".data data"].match(line):
             data = m.group("data")
             for datum in [datum.strip() for datum in data.split(",")]:
                 try:
@@ -357,7 +357,7 @@ def assemble(assembly: str) -> Assembled:
                 )
             continue
 
-        if m := expressions[".u_data data"].match(line):
+        if m := EXPRESSIONS[".u_data data"].match(line):
             data = m.group("data")
             for datum in [datum.strip() for datum in data.split(",")]:
                 try:
@@ -370,14 +370,14 @@ def assemble(assembly: str) -> Assembled:
                 )
             continue
 
-        if m := expressions[".stack val"].match(line):
+        if m := EXPRESSIONS[".stack val"].match(line):
             val = m.group("val")
             ram.extend(
                 ["0000" for _ in range(parse_to_int(val) + 1)],
             )
             continue
 
-        if m := expressions["push d lab"].match(line):
+        if m := EXPRESSIONS["push d lab"].match(line):
             d = m.group("d")
             lab = m.group("lab")
             ram.extend(
@@ -400,7 +400,7 @@ def assemble(assembly: str) -> Assembled:
             )
             continue
 
-        if m := expressions["pop d lab"].match(line):
+        if m := EXPRESSIONS["pop d lab"].match(line):
             d = m.group("d")
             lab = m.group("lab")
             ram.extend(
@@ -423,7 +423,7 @@ def assemble(assembly: str) -> Assembled:
             )
             continue
 
-        if m := expressions["len d lab"].match(line):
+        if m := EXPRESSIONS["len d lab"].match(line):
             d = m.group("d")
             lab = m.group("lab")
             ram.extend(
@@ -432,15 +432,11 @@ def assemble(assembly: str) -> Assembled:
                     f"7f<{lab}>",
                     # R[d] <- M[%f]
                     f"a{d}0f",
-                    # # %e <- 01
-                    # "7e01",
-                    # # R[d] <- R[d] - %e
-                    # f"2{d}{d}e",
                 ]
             )
             continue
 
-        if m := expressions[".ascii ..."].match(line):
+        if m := EXPRESSIONS[".ascii ..."].match(line):
             string = (
                 m.group("string")
                 .replace(r"\\", "\\")
@@ -467,14 +463,14 @@ def assemble(assembly: str) -> Assembled:
                 )
             continue
 
-        if m := expressions["halt"].match(line):
+        if m := EXPRESSIONS["halt"].match(line):
             ram.append(
                 # halt
                 "0000",
             )
             continue
 
-        if m := expressions["ld d [lab]"].match(line):
+        if m := EXPRESSIONS["ld d [lab]"].match(line):
             d = m.group("d")
             lab = m.group("lab")
             ram.extend(
@@ -487,7 +483,7 @@ def assemble(assembly: str) -> Assembled:
             )
             continue
 
-        if m := expressions["ld d [t]"].match(line):
+        if m := EXPRESSIONS["ld d [t]"].match(line):
             d = m.group("d")
             t = m.group("t")
             ram.append(
@@ -496,7 +492,7 @@ def assemble(assembly: str) -> Assembled:
             )
             continue
 
-        if m := expressions["st d [lab]"].match(line):
+        if m := EXPRESSIONS["st d [lab]"].match(line):
             d = m.group("d")
             lab = m.group("lab")
             ram.extend(
@@ -509,7 +505,7 @@ def assemble(assembly: str) -> Assembled:
             )
             continue
 
-        if m := expressions["st d [t]"].match(line):
+        if m := EXPRESSIONS["st d [t]"].match(line):
             d = m.group("d")
             t = m.group("t")
             ram.append(
@@ -518,7 +514,7 @@ def assemble(assembly: str) -> Assembled:
             )
             continue
 
-        if m := expressions["st val [lab]"].match(line):
+        if m := EXPRESSIONS["st val [lab]"].match(line):
             val = m.group("val")
             lab = m.group("lab")
             ram.extend(
@@ -531,7 +527,7 @@ def assemble(assembly: str) -> Assembled:
             )
             continue
 
-        if m := expressions["st val [t]"].match(line):
+        if m := EXPRESSIONS["st val [t]"].match(line):
             val = m.group("val")
             t = m.group("t")
             ram.extend(
@@ -544,7 +540,7 @@ def assemble(assembly: str) -> Assembled:
             )
             continue
 
-        if m := expressions["jz d lab"].match(line):
+        if m := EXPRESSIONS["jz d lab"].match(line):
             d = m.group("d")
             lab = m.group("lab")
             ram.append(
@@ -553,7 +549,7 @@ def assemble(assembly: str) -> Assembled:
             )
             continue
 
-        if m := expressions["jp d lab"].match(line):
+        if m := EXPRESSIONS["jp d lab"].match(line):
             d = m.group("d")
             lab = m.group("lab")
             ram.append(
@@ -562,7 +558,7 @@ def assemble(assembly: str) -> Assembled:
             )
             continue
 
-        if m := expressions["jn d lab"].match(line):
+        if m := EXPRESSIONS["jn d lab"].match(line):
             d = m.group("d")
             lab = m.group("lab")
             ram.extend(
@@ -581,7 +577,7 @@ def assemble(assembly: str) -> Assembled:
             )
             continue
 
-        if m := expressions["je d s lab"].match(line):
+        if m := EXPRESSIONS["je d s lab"].match(line):
             d = m.group("d")
             s = m.group("s")
             lab = m.group("lab")
@@ -595,7 +591,7 @@ def assemble(assembly: str) -> Assembled:
             )
             continue
 
-        if m := expressions["jmp lab"].match(line):
+        if m := EXPRESSIONS["jmp lab"].match(line):
             lab = m.group("lab")
             ram.extend(
                 [
@@ -607,7 +603,7 @@ def assemble(assembly: str) -> Assembled:
             )
             continue
 
-        if m := expressions["call d lab"].match(line):
+        if m := EXPRESSIONS["call d lab"].match(line):
             d = m.group("d")
             lab = m.group("lab")
             ram.append(
@@ -616,7 +612,7 @@ def assemble(assembly: str) -> Assembled:
             )
             continue
 
-        if m := expressions["ret d"].match(line):
+        if m := EXPRESSIONS["ret d"].match(line):
             d = m.group("d")
             ram.append(
                 # PC <- R[d]
@@ -624,7 +620,7 @@ def assemble(assembly: str) -> Assembled:
             )
             continue
 
-        if m := expressions["mv d s"].match(line):
+        if m := EXPRESSIONS["mv d s"].match(line):
             d = m.group("d")
             s = m.group("s")
             ram.extend(
@@ -637,7 +633,7 @@ def assemble(assembly: str) -> Assembled:
             )
             continue
 
-        if m := expressions["mv d lab"].match(line):
+        if m := EXPRESSIONS["mv d lab"].match(line):
             d = m.group("d")
             lab = m.group("lab")
             ram.append(
@@ -646,7 +642,7 @@ def assemble(assembly: str) -> Assembled:
             )
             continue
 
-        if m := expressions["mv d val"].match(line):
+        if m := EXPRESSIONS["mv d val"].match(line):
             d = m.group("d")
             val = m.group("val")
             try:
@@ -658,7 +654,7 @@ def assemble(assembly: str) -> Assembled:
                 raise ToyException(f"Parse error: '{val}' in '{line}'.")
             continue
 
-        if m := expressions["not d"].match(line):
+        if m := EXPRESSIONS["not d"].match(line):
             d = m.group("d")
             ram.extend(
                 [
@@ -670,7 +666,7 @@ def assemble(assembly: str) -> Assembled:
             )
             continue
 
-        if m := expressions["op d s"].match(line):
+        if m := EXPRESSIONS["op d s"].match(line):
             op = m.group("op")
             d = m.group("d")
             s = m.group("s")
@@ -727,7 +723,7 @@ def assemble(assembly: str) -> Assembled:
                     )
             continue
 
-        if m := expressions["op d [t]"].match(line):
+        if m := EXPRESSIONS["op d [t]"].match(line):
             op = m.group("op")
             d = m.group("d")
             t = m.group("t")
@@ -812,7 +808,7 @@ def assemble(assembly: str) -> Assembled:
                     )
             continue
 
-        if m := expressions["op d [lab]"].match(line):
+        if m := EXPRESSIONS["op d [lab]"].match(line):
             op = m.group("op")
             d = m.group("d")
             lab = m.group("lab")
@@ -897,7 +893,7 @@ def assemble(assembly: str) -> Assembled:
                     )
             continue
 
-        if m := expressions["op d val"].match(line):
+        if m := EXPRESSIONS["op d val"].match(line):
             op = m.group("op")
             d = m.group("d")
             val = m.group("val")
@@ -982,7 +978,7 @@ def assemble(assembly: str) -> Assembled:
                     )
             continue
 
-        if m := expressions["op d s t"].match(line):
+        if m := EXPRESSIONS["op d s t"].match(line):
             op = m.group("op")
             d = m.group("d")
             s = m.group("s")
@@ -1031,7 +1027,7 @@ def assemble(assembly: str) -> Assembled:
                     )
             continue
 
-        if m := expressions["op d s [t]"].match(line):
+        if m := EXPRESSIONS["op d s [t]"].match(line):
             op = m.group("op")
             d = m.group("d")
             s = m.group("s")
@@ -1106,7 +1102,7 @@ def assemble(assembly: str) -> Assembled:
                     )
             continue
 
-        if m := expressions["op d s [lab]"].match(line):
+        if m := EXPRESSIONS["op d s [lab]"].match(line):
             op = m.group("op")
             d = m.group("d")
             s = m.group("s")
@@ -1181,7 +1177,7 @@ def assemble(assembly: str) -> Assembled:
                     )
             continue
 
-        if m := expressions["op d s val"].match(line):
+        if m := EXPRESSIONS["op d s val"].match(line):
             op = m.group("op")
             d = m.group("d")
             s = m.group("s")
@@ -1283,6 +1279,3 @@ def assemble(assembly: str) -> Assembled:
     )
 
     return Assembled(assembly, lookup_table, machine_code)
-
-
-def format_assembly(assembly: str) -> str: ...
