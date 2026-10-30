@@ -239,7 +239,7 @@ if __name__ == "__main__":
                             if a < 0 or a > 0xFF:
                                 print("  Expecting a one-byte value...")
                             else:
-                                computer.pc = a
+                                computer.reset_pc(a)
                                 print(f"PC <- {hex(a)[2:].rjust(2, '0')}")
                         except ValueError:
                             print(

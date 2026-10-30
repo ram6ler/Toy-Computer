@@ -2,12 +2,12 @@
 
 Welcome to *Toy Computer & Assembler*, a simple virtual computer and assembler that can be used as an educational tool when introducing students to computer architecture, machine language and assembly.
 
-*Toy Computer & Assembler* is a Python implementation of an [imaginary computer described in chapter 6](https://introcs.cs.princeton.edu/java/62toy/) of
+*Toy Computer & Assembler* is a Python implementation of an [imaginary computer described in chapter 6](https://introcs.cs.princeton.edu/java/62toy/) of:
 
 > **Sedgewick, R. & Wayne, K. (2017)**<br>
 *Computer Science: An Interdisciplinary Approach.*
 
-that provides a simulator for the specified machine as well as a simple assembly language that targets the machine.
+This library provides a simulator for the specified machine as well as a simple assembly language that targets the machine.
 
 ## Installation
 
@@ -20,13 +20,13 @@ pip install git+https://github.com/ram6ler/Toy-Computer.git@main
 
 ## Specifications
 
-*Toy* has a word size of two bytes, sixteen general purpose one-word registers (named 0 to F), and 256 addressable words in memory (i.e. 512 bytes of memory). A one-byte program counter (PC) stores the address of the next instruction; a one-word current instruction register (CIR) stores the next instruction.
+*Toy* has a word size of two bytes, sixteen general-purpose one-word registers (named 0 to F), and 256 addressable words in memory (i.e. 512 bytes of memory). A one-byte program counter (PC) stores the address of the next instruction; a one-word current instruction register (CIR) stores the next instruction.
 
 During decoding, the instruction is interpreted as a one-nibble *opcode* and a three-nibble *operand*. The opcode determines the circuit whose side effects are desired and the operand contains data to be sent to that circuit.
 
 ![](images/toy.svg)
 
-Depending on the selected circuit, the operand can be interpreted as three nibbles D, S and T, or a nibble D and a byte ADDR. (Some instructions ignore sections of the operand.)
+Depending on the selected circuit, the operand can be interpreted as three nibbles (D, S and T), or a nibble (D) and a byte (ADDR). (Some instructions ignore sections of the operand.)
 
 ![](images/instructions.svg)
 
@@ -67,7 +67,7 @@ Input is achieved by setting the originally unused S nibble in a load-indirect i
 |   0   | Load indirect (default; same as original specification).                                                             |
 |   1   | Loads a signed integer from stdin to R[D].                                     |
 |   2   | Loads an unsigned integer from stdin to R[D].                                  |
-|   3   | Writes a string as compressed ascii to memory starting at the address in R[D]. |
+|   3   | Writes a string as condensed ASCII to memory starting at the address in R[D]. |
 |   4   | Loads a random sequence of bits to R[D].                                       |
 
 ### Output
@@ -86,14 +86,14 @@ Output is achieved by setting the originally unused S nibble in a store-indirect
 |   7   | Writes value in R[D] to stdout as a signed hexadecimal value.                                       |
 |   8   | Writes value in R[D] to stdout as an unsigned hexadecimal value.                                    |
 |   9   | Writes value in R[D] to stdout as a binary pattern (e.g. for sprites).                              |
-|   a   | Writes value in R[D] to stdout as ascii characters.                                                 |
+|   a   | Writes value in R[D] to stdout as ASCII characters.                                                 |
 |   b   | Writes a new line to stdout.                                                                     |
 |   c   | Writes the string in memory starting at address in R[D] to stdout (with `\0` as terminator). |
 
 
 ## Machine Language
 
-*Toy* programs can be written in machine language (as defined in S & W), which is tantamount to directly setting the PC and specifying values in memory.
+*Toy* programs can be written in machine language (as defined in S & W), which is equivalent to directly setting the PC and specifying values in memory.
 
 ### Example
 
@@ -179,7 +179,7 @@ PC: 08
 13: 0000; halt
 ```
 
-This can be executed using by saving the machine language program as a text file *example.mc* and then running:
+This can be executed by saving the machine language program as a text file *example.mc* and then running:
 
 ```sh
 python -m toy_computer example.mc
@@ -205,7 +205,7 @@ Programs can also be written in a simple assembly language with the following ex
 
 ### Comments
 
-Comments begin with a two forward slashes (`//`).
+Comments begin with two forward slashes (`//`).
 
 ### Memory Addresses & the PC
 
@@ -223,7 +223,7 @@ my_label:
 
 ### Values, Registers & References
 
-We can express values as plain numbers, which can be expressed in binary (e.g. 0b111111), octal (e.g. 0o77), denary (e.g. 63), hexadecimal (e.g. 0x3f) or as ascii (e.g. '?').
+We can express values as plain numbers, which can be expressed in binary (e.g. 0b111111), octal (e.g. 0o77), denary (e.g. 63), hexadecimal (e.g. 0x3f) or as ASCII (e.g. '?').
 
 The percent sign (%) is used to indicate a register, and brackets are used to indicate the data in memory at the address in a register or a label. For example, %1 represents register 1, [%1] represents the value in memory at the address in register 1, and [my_label] represents the value in memory at the address "my_label".
 
@@ -317,7 +317,7 @@ ret %1
 
 ### Arithmetic and Bitwise Operations
 
-Arithmetic and bitwise operation mnemonics are **add** (addition), **sub** (subtraction), **and** (bitwise and), **or** (bitwise or), **xor** (bitwise xor), **not** (bitwise complement), **lsh** (bitwise left-shift) and **rsh** (bitwise right-shift), and are used to realize arithmetic and bitwise logic side effects.
+Arithmetic and bitwise operation mnemonics are **add** (addition), **sub** (subtraction), **and** (bitwise and), **or** (bitwise or), **xor** (bitwise xor), **not** (bitwise complement), **lsh** (bitwise left-shift) and **rsh** (bitwise right-shift), and are used to realize arithmetic and bitwise logic operations.
 
 Examples:
 
@@ -380,27 +380,27 @@ We can read input from stdin to registers and memory addresses using the **.inpu
 Examples:
 
 ```text
-// Write input signed value to %1.
+// Reads input signed value to %1.
 .input %1
 
-// Write input signed value to memory at address in %1.
+// Reads input signed value to memory at address in %1.
 .input [%1]
 
-// Write input signed value to memory at "my_label".
+// Reads input signed value to memory at "my_label".
 .input [my_label]
 
-// Write input string to memory at address in %1.
+// Reads input string to memory at address in %1.
 .input_str [%1]
 
-// Write input string to memory at "my_label".
+// Reads input string to memory at "my_label".
 .input_str [my_label]
 
-// Write random sequence of bits to %1.
+// Reads random sequence of bits to %1.
 .rand %1
-// Write random sequence of bits to memory at address in %1.
+// Reads random sequence of bits to memory at address in %1.
 .rand [%1]
 
-// Write random sequence of bits to memory at "my_label".
+// Reads random sequence of bits to memory at "my_label".
 .rand [my_label]
 ```
 
@@ -457,7 +457,7 @@ len %2 my_stack
 
 ### Data
 
-We can write data to memory using the mnemonics **.data** (signed values), **.u_data** (unsigned values) and **.ascii** (ascii values).
+We can write data to memory using the mnemonics **.data** (signed values), **.u_data** (unsigned values) and **.ascii** (ASCII values).
 
 Examples:
 
@@ -466,7 +466,7 @@ Examples:
 .data 10, -0b1010, 0o12, -0xa
 .u_data 0xffff
 
-// Write these characters as condensed ascii values.
+// Write these characters as condensed ASCII values.
 .ascii "Hello, world!"
 ```
 
@@ -475,7 +475,7 @@ We can reserve a word using the **.word** mnemonic.
 
 ### Notes
 
-For many assembly instructions, there is a one-to-one translation to equivalent machine language instructions, however some instructions (e.g. the **or** instruction, which is not directly supported by *Toy*) are translated to a sequence of machine language instructions. Registers D, E and F may be used to hold intermediate results in the latter case and should be avoided when programming in assembly.
+For many assembly instructions, there is a one-to-one translation to equivalent machine language instructions, however some instructions (e.g. the **or** instruction, which is not directly supported by *Toy*) are translated to a sequence of machine language instructions. Registers D, E and F may be used to hold intermediate results in the latter case and should thus be avoided when programming in assembly.
 
 ### Example
 
@@ -535,7 +535,7 @@ t_equals: .ascii " = "
           halt              
 ```
 
-This can be executed using by saving the machine language program as a text file *example.asm* (the .asm extension is used to indicate that the program must first be translated to machine language) and then running:
+This can be executed by saving the machine language program as a text file *example.asm* (the .asm extension is used to indicate that the program must first be translated to machine language) and then running:
 
 ```sh
 python -m toy_computer example.asm
@@ -976,4 +976,4 @@ I win!
 
 ## Thanks
 
-Thanks for your interest in this project! If you like, [submit bug reports or requests here](https://github.com/ram6ler/Toy-Computer/issues)!
+Thanks for your interest in this project! Please feel free to [submit bug reports or requests here](https://github.com/ram6ler/Toy-Computer/issues)!

@@ -58,6 +58,10 @@ class Computer:
         ]
         self._halted = False
 
+    def reset_pc(self, value: int) -> None:
+        self._initial_pc = value
+        self.pc = self._initial_pc
+
     def fetch_and_execute(self) -> bool:
         """
         Fetches and executes an instruction; returns whether
