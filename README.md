@@ -782,8 +782,8 @@ CIR: 7f00
  
 > <strong>run</strong>
 .................................................................. Run Started
-Input A: 25
-Input B: -30
+Input A: <strong>25</strong>
+Input B: <strong>-30</strong>
 25 + -30 = -5
 
 .................................................................... Run Ended
