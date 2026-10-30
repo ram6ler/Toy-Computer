@@ -668,13 +668,14 @@ $ python -m toy_computer
 
 <pre>
 
-            .-------..-------..--. .--.
-            |       ||       ||  | |  |
-            '-.   .-'|  .-.  ||  '-'  |
-              |   |  |  | |  ||       |
-              |   |  |  '-'  |'-.   .-'
-              |   |  |       |  |   |
-              '---'  '-------'  '---'
+            ┌───────┐┌───────┐┌──┐ ┌──┐
+            │       ││       ││  │ │  │
+            └─┐   ┌─┘│  ┌─┐  ││  └─┘  │
+              │   │  │  │ │  ││       │
+              │   │  │  └─┘  │└─┐   ┌─┘
+              │   │  │       │  │   │
+              └───┘  └───────┘  └───┘
+           C   O   M   P   U   T   E   R 
           
   Welcome to Toy Computer, a Python implementation of
   an imaginary computer described in chapter 6 of:
@@ -682,7 +683,7 @@ $ python -m toy_computer
     Sedgewick, R. & Wayne, K. (2017)
     Computer Science: An Interdisciplinary Approach
 
-  This implementation (and Toy Assembly) was created by
+  This implementation and Toy Assembly were created by
   Richard Ambler for use in computer science courses at
   Beijing World Youth Academy.
 
@@ -693,45 +694,46 @@ $ python -m toy_computer
 
     https://github.com/ram6ler/Toy-Computer
 
+ 
 > <strong>00: 4865</strong>
   M[00] 0000 -> 4865
-  ascii:      "He"
+  ascii:      He
   value:      18533
   pseudocode: R[8] <- R[6] ^ R[5]
  
 > <strong>01: 6c6c</strong>
   M[01] 0000 -> 6c6c
-  ascii:      "ll"
+  ascii:      ll
   value:      27756
   pseudocode: R[c] <- R[6] >> R[c]
  
 > <strong>02: 6f21</strong>
   M[02] 0000 -> 6f21
-  ascii:      "o!"
+  ascii:      o!
   value:      28449
   pseudocode: R[f] <- R[2] >> R[1]
  
 > <strong>03: 0000</strong>
   M[03] 0000 -> 0000
-  ascii:      ""..
+  ascii:      ◻◻
   value:      0
   pseudocode: halt
  
 > <strong>04: 7a00</strong>
   M[04] 0000 -> 7a00
-  ascii:      "z".
+  ascii:      z◻
   value:      31232
   pseudocode: R[a] <- 00
  
 > <strong>05: bac0</strong>
   M[05] 0000 -> bac0
-  ascii:      "ºÀ"
+  ascii:      ºÀ
   value:      -17728
   pseudocode: stdout <- M[R[a]...]
  
 > <strong>06: b0b0</strong>
   M[06] 0000 -> b0b0
-  ascii:      "°°"
+  ascii:      °°
   value:      -20304
   pseudocode: stdout <- line
  
@@ -780,12 +782,12 @@ CIR: 7f00
  
 > <strong>run</strong>
 .................................................................. Run Started
-Input A: <strong>25</strong>
-Input B: <strong>-30</strong>
+Input A: 25
+Input B: -30
 25 + -30 = -5
 
 .................................................................... Run Ended
-
+ 
 > <strong>quit</strong>
 
 
