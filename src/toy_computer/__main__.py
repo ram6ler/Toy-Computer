@@ -63,7 +63,7 @@ if __name__ == "__main__":
         )
 
     def lineate(message: str) -> None:
-        print(f" {message}".rjust(78, "."))
+        print(f" {message}".rjust(90, "."))
 
     def repl():
         banner()
