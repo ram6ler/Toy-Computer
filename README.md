@@ -667,28 +667,27 @@ $ python -m toy_computer
 ```
 
 <pre>
-
-            ┌───────┐┌───────┐┌──┐ ┌──┐
-            │       ││       ││  │ │  │
-            └─┐   ┌─┘│  ┌─┐  ││  └─┘  │
-              │   │  │  │ │  ││       │
-              │   │  │  └─┘  │└─┐   ┌─┘
-              │   │  │       │  │   │
-              └───┘  └───────┘  └───┘
-           C   O   M   P   U   T   E   R 
+                    ┌───────┐┌───────┐┌──┐ ┌──┐
+                    │       ││       ││  │ │  │
+                    └─┐   ┌─┘│  ┌─┐  ││  └─┘  │
+                      │   │  │  │ │  ││       │
+                      │   │  │  └─┘  │└─┐   ┌─┘
+                      │   │  │       │  │   │
+                      └───┘  └───────┘  └───┘
+                   C   O   M   P   U   T   E   R 
           
-  Welcome to Toy Computer, a Python implementation of
-  an imaginary computer described in chapter 6 of:
+
+  Welcome to Toy Computer, an implementation of an imaginary computer
+  described in chapter 6 of:
 
     Sedgewick, R. & Wayne, K. (2017)
     Computer Science: An Interdisciplinary Approach
 
-  This implementation and Toy Assembly were created by
-  Richard Ambler for use in computer science courses at
-  Beijing World Youth Academy.
+  This implementation and Toy Assembly were created by Richard Ambler
+  for use in computer science courses at Beijing World Youth Academy.
 
-  No guarantees as to usability or correctness are
-  made. Feel free to use or modify as needed.
+  No guarantees as to usability or correctness are made. Feel free to
+  use or modify as needed.
 
   For further details, see:
 
@@ -741,10 +740,10 @@ $ python -m toy_computer
 PC <- 04
  
 > <strong>run</strong>
-.................................................................. Run Started
+.............................................................................. Run Started
 Hello!
 
-.................................................................... Run Ended
+................................................................................ Run Ended
  
 > <strong>load examples/asm/example.asm</strong>
   Compiled examples/asm/example.asm as assembly.
@@ -781,12 +780,12 @@ PC: 0c (0c)
 CIR: 7f00
  
 > <strong>run</strong>
-.................................................................. Run Started
+.............................................................................. Run Started
 Input A: <strong>25</strong>
 Input B: <strong>-30</strong>
 25 + -30 = -5
 
-.................................................................... Run Ended
+................................................................................ Run Ended
  
 > <strong>quit</strong>
 

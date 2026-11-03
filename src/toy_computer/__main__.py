@@ -22,6 +22,7 @@ if __name__ == "__main__":
             "clear": None,
             "quit": None,
             "help": None,
+            "instructions": None,
             "pc": None,
         },
         ignore_case=True,
@@ -32,35 +33,107 @@ if __name__ == "__main__":
     def banner():
         print(
             r"""
-            ┌───────┐┌───────┐┌──┐ ┌──┐
-            │       ││       ││  │ │  │
-            └─┐   ┌─┘│  ┌─┐  ││  └─┘  │
-              │   │  │  │ │  ││       │
-              │   │  │  └─┘  │└─┐   ┌─┘
-              │   │  │       │  │   │
-              └───┘  └───────┘  └───┘
-           C   O   M   P   U   T   E   R 
+                    ┌───────┐┌───────┐┌──┐ ┌──┐
+                    │       ││       ││  │ │  │
+                    └─┐   ┌─┘│  ┌─┐  ││  └─┘  │
+                      │   │  │  │ │  ││       │
+                      │   │  │  └─┘  │└─┐   ┌─┘
+                      │   │  │       │  │   │
+                      └───┘  └───────┘  └───┘
+                   C   O   M   P   U   T   E   R 
           """
         )
         print(
-            """  Welcome to Toy Computer, a Python implementation of
-  an imaginary computer described in chapter 6 of:
+            """
+  Welcome to Toy Computer, an implementation of an imaginary computer
+  described in chapter 6 of:
 
     Sedgewick, R. & Wayne, K. (2017)
     Computer Science: An Interdisciplinary Approach
 
-  This implementation and Toy Assembly were created by
-  Richard Ambler for use in computer science courses at
-  Beijing World Youth Academy.
+  This implementation and Toy Assembly were created by Richard Ambler
+  for use in computer science courses at Beijing World Youth Academy.
 
-  No guarantees as to usability or correctness are
-  made. Feel free to use or modify as needed.
+  No guarantees as to usability or correctness are made. Feel free to
+  use or modify as needed.
 
   For further details, see:
 
     https://github.com/ram6ler/Toy-Computer
 """
         )
+
+    def show_help():
+        print(
+            r"""
+  To use:
+        
+  help                Display this help message.
+        
+  instructions        Display instruction set.
+            
+  load [p]            Compile and load a machine language or assembly language
+                      file p. (If .asm is contained in the file name the language
+                      is assumed to be assembly.) If no path is provided, re-compile
+                      loaded file.
+          
+  run                 Run the program from the current position.
+          
+  dump [p]            Output the memory and register data. If a path is given,
+                      save dump to path p.
+          
+  machine [p]         Output the current state as machine language. If a path is
+                      given, save machine language to path p.
+          
+  step                Step through one fetch-decode-execute cycle.
+          
+  clear               Reset computer to original loaded state.
+          
+  erase               Clear registers and memory.
+          
+  format s d          Saves assembly file at path s as formatted html to path d. 
+          
+  quit                Quit.
+          
+  PC: {addr}          Set the program counter to address addr. (addr expected in
+                      hexadecimal.)
+          
+  {addr}: {val}       Write value val to one-byte memory address addr. (addr and
+                      val expected in hexadecimal.)
+              """
+        )
+
+    def show_instructions():
+        print("""
+Instruction structure:
+ ┌──┬──┬──┬──┬──┬──┬──┬──┬──┬──┬──┬──┬──┬──┬──┬──┐
+ │  OPCODE   │     D     │     S     │     T     │
+ └──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┘
+ ┌──┬──┬──┬──┬──┬──┬──┬──┬──┬──┬──┬──┬──┬──┬──┬──┐
+ │  OPCODE   │     D     │         ADDR          │
+ └──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┘
+Instructions:
+ ┌────────┬─────────────────┬───────────────────────┐   
+ │ Opcode │ Description     │ Pseudocode            │
+ ├────────┼─────────────────┼───────────────────────┤
+ │ 0      │ Halt            │ Halt                  │
+ │ 1      │ Add             │ R[D] ← R[S] + R[T]    │
+ │ 2      │ Subtract        │ R[D] ← R[S] - R[T]    │
+ │ 3      │ Bitwise And     │ R[D] ← R[S] & R[T]    │
+ │ 4      │ Bitwise Xor     │ R[D] ← R[S] ^ R[T]    │
+ │ 5      │ Left Shift      │ R[D] ← R[S] << R[T]   │
+ │ 6      │ Right Shift     │ R[D] ← R[S] >> R[T]   │
+ │ 7      │ Load Address    │ R[D] ← ADDR           │
+ │ 8      │ Load            │ R[D] ← M[ADDR]        │
+ │ 9      │ Store           │ M[ADDR] ← R[D]        │
+ │ A      │ Load Indirect   │ R[D] ← M[R[T]]        │
+ │ B      │ Store Indirect  │ M[R[T]] ← R[D]        │
+ │ C      │ Branch Zero     │ if R[D] = 0 PC ← ADDR │
+ │ D      │ Branch Positive │ if R[D] > 0 PC ← ADDR │
+ │ E      │ Jump Register   │ PC ← R[D]             │
+ │ F      │ Jump & Link     │ R[D] ← PC; PC ← ADDR  │
+ └────────┴─────────────────┴───────────────────────┘
+        """)
 
     def lineate(message: str) -> None:
         print(f" {message}".rjust(90, "."))
@@ -124,43 +197,10 @@ if __name__ == "__main__":
             )
             match split(r" +", instruction.strip()):
                 case ["help"] | ["h"]:
-                    print(
-                        r"""
-  To use:
+                    show_help()
 
-  help                Display this help message.
-    
-  load [p]            Compile and load a machine language or
-                      assembly language file p. (If .asm is
-                      contained in the file name the language
-                      is assumed to be assembly.) If no path is
-                      provided, re-compile loaded file.
-  
-  run                 Run the program from the current position.
-  
-  dump [p]            Output the memory and register data. If a path is
-                      added, save dump to path p.
-  
-  machine [p]         Output the current state as machine language. If
-                      a path is added, save machine language to path p.
-  
-  step                Step through one fetch-decode-execute cycle.
-  
-  clear               Reset computer to original loaded state.
-  
-  erase               Clear registers and memory.
-  
-  format s d          Saves assembly file at path s as formatted html to path d. 
-  
-  quit                Quit.
-  
-  PC: {addr}          Set the program counter to address addr. (addr 
-                      expected in hexadecimal.)
-  
-  {addr}: {val}       Write value val to one-byte memory address addr.
-                      (addr and val expected in hexadecimal.)
-      """
-                    )
+                case ["instructions"] | ["i"]:
+                    show_instructions()
 
                 case ["load", path] | ["l", path]:
                     load_path(path)
