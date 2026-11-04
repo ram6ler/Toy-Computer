@@ -95,11 +95,12 @@ if __name__ == "__main__":
           
   quit                Quit.
           
-  PC: {addr}          Set the program counter to address addr. (addr expected in
-                      hexadecimal.)
+  PC: {addr}          Set the program counter to address addr, where addr is a
+                      hexadecimal byte (two nibble digits).
           
-  {addr}: {val}       Write value val to one-byte memory address addr. (addr and
-                      val expected in hexadecimal.)
+  {addr}: {val}       Write value val to one-byte memory address addr, where addr
+                      is a hexadecimal byte (two nibble digits) and val is a
+                      hexadecimal word (four nibble digits).
               """
         )
 
