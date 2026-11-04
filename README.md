@@ -67,7 +67,7 @@ Input is achieved by setting the originally unused S nibble in a load-indirect i
 |   0   | Load indirect (default; same as original specification).                                                             |
 |   1   | Loads a signed integer from stdin to R[D].                                     |
 |   2   | Loads an unsigned integer from stdin to R[D].                                  |
-|   3   | Writes a string as condensed ASCII to memory starting at the address in R[D]. |
+|   3   | Writes a string from stdin as condensed ASCII to memory starting at the address in R[D]. |
 |   4   | Loads a random sequence of bits to R[D].                                       |
 
 ### Output
