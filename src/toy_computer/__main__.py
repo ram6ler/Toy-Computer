@@ -134,6 +134,34 @@ Instructions:
  │ E      │ Jump Register   │ PC ← R[D]             │
  │ F      │ Jump & Link     │ R[D] ← PC; PC ← ADDR  │
  └────────┴─────────────────┴───────────────────────┘
+ Load Indirect (A) Extensions:
+ ┌───┬─────────────────────────────────────┐ 
+ │ S │ Description                         │
+ ├───┼─────────────────────────────────────┤
+ │ 0 │ Load Indirect (default)             │
+ │ 1 │ R[D] ← signed integer from IO       │
+ │ 2 │ R[D] ← unsigned integer from IO     │
+ │ 3 │ M[R[D]..] ← condensed ASCII from IO │
+ │ 4 │ R[D] ← random word                  │
+ └───┴─────────────────────────────────────┘
+ Store Indirect (B) Extensions:
+ ┌───┬───────────────────────────────────────────┐ 
+ │ S │ Description                               │
+ ├───┼───────────────────────────────────────────┤
+ │ 0 │ Store Indirect (default)                  │
+ │ 1 │ Writes R[D] to IO as signed decimal       │
+ │ 2 │ Writes R[D] to IO as unsigned decimal     │
+ │ 3 │ Writes R[D] to IO as signed binary        │
+ │ 4 │ Writes R[D] to IO as unsigned binary      │
+ │ 5 │ Writes R[D] to IO as signed octal         │
+ │ 6 │ Writes R[D] to IO as unsigned octal       │
+ │ 7 │ Writes R[D] to IO as signed hexadecimal   │
+ │ 8 │ Writes R[D] to IO as unsigned hexadecimal │
+ │ 9 │ Writes R[D] to IO as binary pattern       │
+ │ A │ Writes R[D] to IO as ASCII characters     │
+ │ B │ Writes new line to IO                     │
+ │ C │ Writes string starting at M[R[D]] to IO   │
+ └───┴───────────────────────────────────────────┘
         """)
 
     def lineate(message: str) -> None:
