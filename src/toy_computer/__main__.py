@@ -185,6 +185,10 @@ Instructions:
                 except IsADirectoryError:
                     print(f"  '{path}' is a directory...")
                     return False
+                except UnicodeDecodeError:
+                    print("  * Error:")
+                    print(f"  {path} is an invalid text file...")
+                    return False
 
                 try:
                     if ".asm" in path:
@@ -198,6 +202,7 @@ Instructions:
                             )
                         )
                         print(f"  PC: {hex(computer.pc)[2:].rjust(2, '0')}")
+
                     else:
                         computer.load(program)
                         print(f"  Loaded {path} as machine language.")
@@ -388,20 +393,24 @@ Instructions:
         except KeyboardInterrupt:
             print("\n  So long!\n")
     elif len(argv) == 2:
-        try:
-            with open(argv[1]) as f:
-                code = f.read()
-        except FileNotFoundError:
-            print(f"  File '{argv[1]}' not found...")
-            exit()
+        if ".mc" in argv[1] or ".asm" in argv[1]:
+            try:
+                with open(argv[1]) as f:
+                    code = f.read()
+            except FileNotFoundError:
+                print(f"  File '{argv[1]}' not found...")
+                exit()
 
-        computer = Computer()
-        if ".asm" in argv[1]:
-            assembled = assemble(code)
-            computer.load(assembled.machine_code)
+            computer = Computer()
+            if ".asm" in argv[1]:
+                assembled = assemble(code)
+                computer.load(assembled.machine_code)
+            else:
+                computer.load(code)
+            computer.run()
         else:
-            computer.load(code)
-        computer.run()
+            computer = Computer.from_binary(argv[1])
+            computer.run()
     else:
         print(
             """
