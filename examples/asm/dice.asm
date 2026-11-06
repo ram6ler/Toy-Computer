@@ -146,6 +146,7 @@ v_correct:
     st %0 [v_dice]
     mv %0 0
     st %0 [v_problem_no]
+    st %0 [v_correct]
 game_loop:
     ld %0 [v_problem_no]
     add %0 1
@@ -175,6 +176,7 @@ next_problem:
     st %0 [v_problem_no]
     jmp game_loop
 done:
+    .line
     .write [t_score]
     ld %0 [v_correct]
     .den %0

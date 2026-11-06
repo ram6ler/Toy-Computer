@@ -29,13 +29,16 @@ class Assembled:
         if not self._lookup_table:
             return result
         width = max(len(k) for k in self._lookup_table)
-        result += f".-{'-' * width}-----.\n"
+
+        result += f"┌─{'─' * width}─┬─────────┐\n"
+        result += f"│ {'Label'.rjust(width)} │ Address │\n"
+        result += f"├─{'─' * width}─┼─────────┤\n"
         for k in sorted(self._lookup_table):
             result += (
-                f"| {k.rjust(width)}: "
-                f"{hex(self._lookup_table[k])[2:].rjust(2, '0')} |\n"
+                f"│ {k.rjust(width)} │ "
+                f"{hex(self._lookup_table[k])[2:].rjust(2, '0')}      │\n"
             )
-        result += f"'-{'-' * width}-----'\n"
+        result += f"└─{'─' * width}─┴─────────┘\n"
         return result
 
     @property

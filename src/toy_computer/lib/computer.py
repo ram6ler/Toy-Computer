@@ -30,11 +30,27 @@ def data_from_machine_code(code: str) -> tuple[int, list[int]]:
     return pc, instructions
 
 
+def data_from_binary(path: str) -> tuple[int, list[int]]:
+    with open(path, "rb") as f:
+        data = f.read()
+    pc, *data = data
+    ram = list[int]()
+    while data:
+        b1, b2, *data = data
+        ram.append((b1 << 8) + b2)
+    return pc, ram
+
+
 class Computer:
     @staticmethod
     def from_machine_code(code: str) -> Computer:
         pc, instructions = data_from_machine_code(code)
         return Computer(pc=pc, ram=instructions)
+
+    @staticmethod
+    def from_binary(path: str) -> Computer:
+        pc, ram = data_from_binary(path)
+        return Computer(pc=pc, ram=ram)
 
     def __init__(
         self,
@@ -282,7 +298,7 @@ class Computer:
                             bin(data)[2:]
                             .rjust(16, "0")
                             .replace("1", "█")
-                            .replace("0", " "),
+                            .replace("0", "░"),
                             end="",
                         )
 
@@ -434,3 +450,10 @@ class Computer:
             result += "\n"
 
         return result
+
+    def save_as_binary(self, path: str) -> None:
+        data = [self._initial_pc]
+        for w in self.ram:
+            data.extend(w.as_bytes)
+        with open(path, "wb") as f:
+            f.write(bytes(data))

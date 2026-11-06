@@ -16,6 +16,7 @@ if __name__ == "__main__":
             "dump": PathCompleter(),
             "machine": PathCompleter(),
             "format": PathCompleter(),
+            "build": PathCompleter(),
             "run": None,
             "step": None,
             "erase": None,
@@ -72,10 +73,11 @@ if __name__ == "__main__":
         
   instructions        Display instruction set.
             
-  load [p]            Compile and load a machine language or assembly language
-                      file p. (If .asm is contained in the file name the language
-                      is assumed to be assembly.) If no path is provided, re-compile
-                      loaded file.
+  load [p]            Load a machine language or assembly language program from
+                      file p. File p should have extension .asm if assembly, .mc
+                      if machine language, or no extension if a compiled binary.
+
+  build [p]           Compile current program to a binary file at path p.
           
   run                 Run the program from the current position.
           
@@ -173,37 +175,47 @@ Instructions:
         computer = Computer()
 
         def load_path(path: str) -> bool:
-            try:
-                with open(path) as f:
-                    program = f.read()
-            except FileNotFoundError:
-                print(f"  File '{path}' not found...")
-                return False
-            except IsADirectoryError:
-                print(f"  '{path}' is a directory...")
-                return False
+            if ".asm" in path or ".mc" in path:
+                try:
+                    with open(path) as f:
+                        program = f.read()
+                except FileNotFoundError:
+                    print(f"  File '{path}' not found...")
+                    return False
+                except IsADirectoryError:
+                    print(f"  '{path}' is a directory...")
+                    return False
 
-            try:
-                if ".asm" in path:
-                    assembled = assemble(program)
-                    computer.load(assembled.machine_code)
-                    print(f"  Compiled {path} as assembly.")
-                    print(
-                        "\n".join(
-                            f"  {line}"
-                            for line in assembled.lookup_table.split("\n")
+                try:
+                    if ".asm" in path:
+                        assembled = assemble(program)
+                        computer.load(assembled.machine_code)
+                        print(f"  Loaded {path} as assembly.")
+                        print(
+                            "\n".join(
+                                f"  {line}"
+                                for line in assembled.lookup_table.split("\n")
+                            )
                         )
-                    )
-                    print(f"  PC: {hex(computer.pc)[2:].rjust(2, '0')}")
-                else:
-                    computer.load(program)
-                    print(f"  Compiled {path} as machine language.")
-                    print(f"  PC: {hex(computer.pc)[2:].rjust(2, '0')}")
-                return True
-            except ToyException as e:
-                print("  * Error:")
-                print(f"  {e.message}")
-                return False
+                        print(f"  PC: {hex(computer.pc)[2:].rjust(2, '0')}")
+                    else:
+                        computer.load(program)
+                        print(f"  Loaded {path} as machine language.")
+                        print(f"  PC: {hex(computer.pc)[2:].rjust(2, '0')}")
+                    return True
+                except ToyException as e:
+                    print("  * Error:")
+                    print(f"  {e.message}")
+                    return False
+            else:
+                try:
+                    t = Computer.from_binary(path)
+                    computer.load(t.breakdown)
+                    print(f"  Loaded {path} as compiled binary.")
+                except ValueError:
+                    print("  * Error:")
+                    print("  Expecting a binary file.")
+            return True
 
         def run_program():
             lineate("Run Started")
@@ -233,6 +245,17 @@ Instructions:
 
                 case ["load", path] | ["l", path]:
                     load_path(path)
+
+                case ["build", path] | ["b", path]:
+                    try:
+                        computer.save_as_binary(path)
+                        print(f"Binary saved to {path}")
+                    except FileNotFoundError:
+                        print(f"  File '{path}' not found...")
+                        return False
+                    except IsADirectoryError:
+                        print(f"  '{path}' is a directory...")
+                        return False
 
                 case ["clear"] | ["c"]:
                     computer.clear()
