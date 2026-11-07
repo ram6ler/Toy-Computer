@@ -183,7 +183,9 @@ class Computer:
                     # Extension: stdin
                     case 0x1:
                         # input
-                        response = Word.make_from_signed_value(stdin_get_int()).as_bytes
+                        response = Word.make_from_signed_value(
+                            stdin_get_int()
+                        ).as_bytes
                         self.registers[d].update(response)
 
                     case 0x2:
@@ -234,7 +236,9 @@ class Computer:
                     case 0x4:
                         # rand
                         self.registers[d].update(
-                            Word.make_from_unsigned_value(randrange(2**16)).as_bytes
+                            Word.make_from_unsigned_value(
+                                randrange(2**16)
+                            ).as_bytes
                         )
 
                     case _:
@@ -411,7 +415,9 @@ class Computer:
         the values in the registers and the RAM.
         """
         result = ""
-        result += f"           {'   '.join(f'_{hex(i)[2:]}' for i in range(16))}\n"
+        result += (
+            f"           {'   '.join(f'_{hex(i)[2:]}' for i in range(16))}\n"
+        )
         for i in range(16):
             result += f"%{hex(i)[2:]} {self.registers[i]} {hex(i)[2:]}_ "
             result += " ".join(f"{self.ram[i * 16 + j]}" for j in range(16))
@@ -456,8 +462,13 @@ class Computer:
         for w in self.ram:
             data.extend(w.as_bytes)
         i = len(data) - 1
-        while data[i] == 0:
-            i -= 1
-        data = data[:i]
+        while i > 1:
+            datum = (data[i - 1] << 8) + data[i]
+            if datum == 0:
+                i -= 2
+            else:
+                break
+
+        data = data[: (i + 1)]
         with open(path, "wb") as f:
             f.write(bytes(data))

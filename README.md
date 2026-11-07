@@ -36,21 +36,21 @@ The available machine instructions are:
 | Opcode | Description     | Pseudocode            |
 | :----: | :-------------- | :-------------------- |
 |   0    | halt            | halt                  |
-|   1    | add             | R[d] ← R[s] + R[t]    |
-|   2    | subtract        | R[d] ← R[s] - R[t]    |
-|   3    | bitwise and     | R[d] ← R[s] & R[t]    |
-|   4    | bitwise xor     | R[d] ← R[s] ^ R[t]    |
-|   5    | left shift      | R[d] ← R[s] << R[t]   |
-|   6    | right shift     | R[d] ← R[s] >> R[t]   |
-|   7    | load address    | R[d] ← addr           |
-|   8    | load            | R[d] ← M[addr]        |
-|   9    | store           | M[addr] ← R[d]        |
-|   A    | load indirect   | R[d] ← M[R[t]]        |
-|   B    | store indirect  | M[R[t]] ← R[d]        |
-|   C    | branch zero     | if R[d] = 0 PC ← addr |
-|   D    | branch positive | if R[d] > 0 PC ← addr |
-|   E    | jump register   | PC ← R[d]             |
-|   F    | jump & link     | R[d] ← PC; PC ← addr  |
+|   1    | add             | R[D] ← R[S] + R[T]    |
+|   2    | subtract        | R[D] ← R[S] - R[T]    |
+|   3    | bitwise and     | R[D] ← R[S] & R[T]    |
+|   4    | bitwise xor     | R[D] ← R[S] ^ R[T]    |
+|   5    | left shift      | R[D] ← R[S] << R[T]   |
+|   6    | right shift     | R[D] ← R[S] >> R[T]   |
+|   7    | load address    | R[D] ← ADDR           |
+|   8    | load            | R[D] ← M[ADDR]        |
+|   9    | store           | M[ADDR] ← R[D]        |
+|   A    | load indirect   | R[D] ← M[R[T]]        |
+|   B    | store indirect  | M[R[T]] ← R[D]        |
+|   C    | branch zero     | if R[D] = 0 PC ← ADDR |
+|   D    | branch positive | if R[D] > 0 PC ← ADDR |
+|   E    | jump register   | PC ← R[D]             |
+|   F    | jump & link     | R[D] ← PC; PC ← ADDR  |
 
 During execution, the side effects of the selected circuit are realized, which can be helpful for solving a problem (indeed, programming is ultimately the art of expressing solutions to problems in terms of side effects that can be realized in a machine).
 
@@ -86,9 +86,9 @@ Output is achieved by setting the originally unused S nibble in a store-indirect
 |   7   | Writes value in R[D] to stdout as a signed hexadecimal value.                                       |
 |   8   | Writes value in R[D] to stdout as an unsigned hexadecimal value.                                    |
 |   9   | Writes value in R[D] to stdout as a binary pattern (e.g. for sprites).                              |
-|   a   | Writes value in R[D] to stdout as ASCII characters.                                                 |
-|   b   | Writes a new line to stdout.                                                                     |
-|   c   | Writes the string in memory starting at address in R[D] to stdout (with `\0` as terminator). |
+|   A   | Writes value in R[D] to stdout as ASCII characters.                                                 |
+|   B   | Writes a new line to stdout.                                                                     |
+|   C   | Writes the string in memory starting at address in R[D] to stdout (with `\0` as terminator). |
 
 
 ## Machine Language
@@ -211,7 +211,7 @@ Comments begin with two forward slashes (`//`).
 
 Unlike the case with machine language, in assembly, we don't work explicitly with the PC and memory addresses. Instead we use the **.main** mnemonic to indicate the starting address and *labels* to represent important memory addresses.
 
-Example:
+Examples:
 
 ```text
 // Sets the PC to the current address.
@@ -397,6 +397,7 @@ Examples:
 
 // Reads random sequence of bits to %1.
 .rand %1
+
 // Reads random sequence of bits to memory at address in %1.
 .rand [%1]
 
@@ -658,7 +659,7 @@ As already demonstrated above, we can run machine language or assembly files by 
 python -m toy_computer example.asm
 ```
 
-If we just run `toy_computer` without any arguments in the terminal, an interactive session begins, which allows us to load, edit, run, or step through programs and get detailed breakdowns of the computer state at different points.
+If we just run `toy_computer` without any arguments in the terminal, an interactive REPL starts, which allows us to load, edit, run, or step through programs and get detailed breakdowns of the computer state at different points.
 
 An example session:
 
@@ -994,6 +995,169 @@ I take 1 from heap 4.
 
 I win!
 </pre>
+
+
+## Machine Code, Assembly & Binaries
+
+As we've already seen, Toy can run a machine code script, which is a text file with the extension `.mc`, or an assembly script, which is a text file with the extension `.asm`. Programs can also be compiled into a binary file through the `save_as_binary` method on an instance of `Computer` or by using the `build` command in the REPL.
+
+For example, say we want to compile `dice.asm` from the REPL:
+
+<pre>
+> <strong>load examples/asm/dice.asm</strong>
+  Loaded examples/asm/dice.asm as assembly.
+  ┌──────────────┬─────────┐
+  │        Label │ Address │
+  ├──────────────┼─────────┤
+  │  border_loop │ 55      │
+  │      correct │ db      │
+  │       d_dice │ 1b      │
+  │     d_offset │ 15      │
+  │  dice_values │ fd      │
+  │         done │ f0      │
+  │  done_border │ 5b      │
+  │   done_layer │ a4      │
+  │  done_layers │ a8      │
+  │     done_try │ 76      │
+  │         draw │ 79      │
+  │  draw_border │ 4d      │
+  │   draw_layer │ 5d      │
+  │    game_loop │ c5      │
+  │   layer_loop │ 90      │
+  │       layers │ 00      │
+  │   next_layer │ 88      │
+  │ next_problem │ e3      │
+  │    t_correct │ 3c      │
+  │       t_dice │ 35      │
+  │        t_how │ 25      │
+  │    t_problem │ 30      │
+  │   t_problems │ 2a      │
+  │     t_prompt │ 39      │
+  │      t_score │ 43      │
+  │      t_slash │ 47      │
+  │      t_start │ 22      │
+  │      t_wrong │ 3f      │
+  │        throw │ 60      │
+  │   throw_loop │ 65      │
+  │     try_loop │ 66      │
+  │    v_correct │ ae      │
+  │       v_dice │ 4a      │
+  │ v_problem_no │ ad      │
+  │   v_problems │ 49      │
+  │        v_sum │ 4b      │
+  │        v_top │ 4c      │
+  └──────────────┴─────────┘
+  
+  PC: af
+ 
+> <strong>build dice</strong>
+Binary saved to dice.
+</pre>
+
+In the root directory, we can now examine the generated binary file, for example, using `xxd`:
+
+```
+% xxd dice                    
+00000000: af2e 2d2d 2d2e 007c 2020 207c 007c 6f20  ..---..|   |.|o 
+00000010: 207c 007c 6f20 6f7c 007c 2020 6f7c 007c   |.|o o|.|  o|.|
+00000020: 206f 207c 0027 2d2d 2d27 0000 0000 0300   o |.'---'......
+00000030: 0600 0900 0c00 0f00 0001 5102 1402 5403  ..........Q...T.
+00000040: 1303 5303 3344 6963 6521 0048 6f77 206d  ..S.3Dice!.How m
+00000050: 616e 7920 0070 726f 626c 656d 733f 2000  any .problems? .
+00000060: 0050 726f 626c 656d 3a20 0064 6963 653f  .Problem: .dice?
+00000070: 2000 0053 756d 3f20 0047 6f6f 6421 0057   ..Sum? .Good!.W
+00000080: 726f 6e67 2100 0053 636f 7265 3a20 0020  rong!..Score: . 
+00000090: 2f20 0000 0000 0000 0000 007f 4aa0 0f71  / ..........J..q
+000000a0: 007f 4ca2 0fd2 557f 1211 1fc0 5bb1 c07f  ..L...U.....[...
+000000b0: 0120 0f7f 55ef 00b0 b0eb 007f 4aa0 0f71  . ..U.......J..q
+000000c0: 007f 4aa0 0f71 fd72 0076 0013 12a4 407f  ..J..q.r.v....@.
+000000d0: 0734 4fc4 667f 0625 4fd5 66b4 0316 647f  .4O.f..%O.f...d.
+000000e0: 0112 2f7f 0120 0fc0 767f 65ef 007f 4bb6  ../.. ..v.e...K.
+000000f0: 0fea 0070 017f 4cb0 0ffb 4d7f 4aa0 0f70  ...p..L...M.J..p
+00000100: fd71 1572 1b7f f07e 085f fe7e 0043 ef74  .q.r...~._.~.C.t
+00000110: 0c7f 4aa5 0f7f 0125 5f7f 0463 3f7f 0424  ..J....%_..c?..$
+00000120: 4f7f 004f f57e 0f6f fedf a416 05a6 0617  O..O.~.o........
+00000130: 26a7 0737 7367 7418 17a8 0879 0019 98b9  &..7sgt....y....
+00000140: c07f 0125 5f7f 90ef 00b0 b0c4 a87f 88ef  ...%_...........
+00000150: 0070 007f 4cb0 0ffb 4dea 0000 0000 007f  .p..L...M.......
+00000160: 22bf c0b0 b07f 25bf c07f 2abf c0a0 107f  ".....%...*.....
+00000170: 49b0 0f7f 25bf c07f 35bf c0a0 107f 4ab0  I...%...5.....J.
+00000180: 0f70 007f adb0 0f7f aeb0 0f7f ada0 0f7f  .p..............
+00000190: 0110 0fb0 b07f 30bf c0b0 10b0 b0fa 60fa  ......0.......`.
+000001a0: 797f 39bf c0a1 107f 4ba2 0f4f 12cf db7f  y.9.....K..O....
+000001b0: 3fbf c07f e3ef 007f 3cbf c07f aea0 0f7f  ?.......<.......
+000001c0: 0110 0f7f aeb0 0fb0 b07f ada0 0f7f 49a1  ..............I.
+000001d0: 0f7f 0110 0f4f 01cf f07f adb0 0f7f c5ef  .....O..........
+000001e0: 00b0 b07f 43bf c07f aea0 0fb0 107f 47bf  ....C.........G.
+000001f0: c07f 49a0 0fb0 10b0 b0                   ..I......
+```
+
+And we can load and run the binary file in the REPL:
+
+<pre>
+> <strong>load dice</strong>
+  Loaded dice as compiled binary.
+ 
+> <strong>run</strong>
+.............................................................................. Run Started
+Dice!
+How many problems? <strong>2</strong>
+How many dice? <strong>3</strong>
+
+Problem: 1
+.---..---..---.
+|   ||o  ||o o|
+| o || o || o |
+|   ||  o||o o|
+'---''---''---'
+Sum? <strong>9</strong>
+Good!
+
+Problem: 2
+.---..---..---.
+|o  ||o  ||o  |
+|   || o ||   |
+|  o||  o||  o|
+'---''---''---'
+Sum? <strong>8</strong>
+Wrong!
+
+Score: 1 / 2
+
+................................................................................ Run Ended
+ 
+>
+</pre>
+
+Or run the binary file directly:
+
+```
+% python3 -m toy_computer dice
+Dice!
+How many problems? 2
+How many dice? 3
+
+Problem: 1
+.---..---..---.
+|o o||o o||o o|
+| o || o ||   |
+|o o||o o||o o|
+'---''---''---'
+Sum? 14
+Good!
+
+Problem: 2
+.---..---..---.
+|o o||   ||   |
+|o o|| o || o |
+|o o||   ||   |
+'---''---''---'
+Sum? 9
+Wrong!
+
+Score: 1 / 2
+%
+```
 
 
 ## Thanks

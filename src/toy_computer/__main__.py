@@ -265,7 +265,7 @@ Instructions:
                 case ["build", path] | ["b", path]:
                     try:
                         computer.save_as_binary(path)
-                        print(f"Binary saved to {path}")
+                        print(f"Binary saved to {path}.")
                     except FileNotFoundError:
                         print(f"  File '{path}' not found...")
                     except IsADirectoryError:
@@ -332,7 +332,8 @@ Instructions:
                     else:
                         print(
                             "\n".join(
-                                f"  {line}" for line in computer.breakdown.split("\n")
+                                f"  {line}"
+                                for line in computer.breakdown.split("\n")
                             )
                         )
 
@@ -390,7 +391,9 @@ Instructions:
                             )
                             continue
                         if v < 0 or v > 0xFFFF:
-                            print(f"  Value {hex(v)} cannot be stored in two bytes...")
+                            print(
+                                f"  Value {hex(v)} cannot be stored in two bytes..."
+                            )
                             continue
                         print(
                             f"  M[{hex(a)[2:].rjust(2, '0')}] "
@@ -407,7 +410,9 @@ Instructions:
                         )
 
                 case _:
-                    print("  Not understood. Input 'help' for available instructions.")
+                    print(
+                        "  Not understood. Input 'help' for available instructions."
+                    )
 
     if len(argv) == 1:
         try:
