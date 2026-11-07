@@ -667,6 +667,7 @@ $ python -m toy_computer
 ```
 
 <pre>
+
                     ┌───────┐┌───────┐┌──┐ ┌──┐
                     │       ││       ││  │ │  │
                     └─┐   ┌─┘│  ┌─┐  ││  └─┘  │
@@ -693,6 +694,46 @@ $ python -m toy_computer
 
     https://github.com/ram6ler/Toy-Computer
 
+ 
+> <strong>help</strong>
+
+  To use:
+        
+  help                Display this help message.
+        
+  instructions        Display instruction set.
+            
+  load p              Load a machine language or assembly language program from
+                      file p. File p should have extension .asm if assembly, .mc
+                      if machine language, or no extension if a compiled binary.
+
+  build p             Compile current program to a binary file at path p.
+          
+  run                 Run the program from the current position.
+          
+  dump (p)            Output the memory and register data. If path p is given,
+                      save dump to path p.
+          
+  machine (p)         Output the current state as machine language. If path p is
+                      given, save machine language to path p.
+          
+  step                Step through one fetch-decode-execute cycle.
+          
+  clear               Reset computer to original loaded state.
+          
+  erase               Clear registers and memory.
+          
+  format p q          Saves assembly file at path p as formatted html at path d. 
+                    
+  PC: addr            Set the program counter to address addr, where addr is a
+                      hexadecimal byte (two nibble digits).
+          
+  addr: val           Write value val to one-byte memory address addr, where addr
+                      is a hexadecimal byte (two nibble digits) and val is a
+                      hexadecimal word (four nibble digits).
+
+  quit                Quit.
+              
  
 > <strong>00: 4865</strong>
   M[00] 0000 -> 4865
@@ -746,43 +787,23 @@ Hello!
 ................................................................................ Run Ended
  
 > <strong>load examples/asm/example.asm</strong>
-  Compiled examples/asm/example.asm as assembly.
-  .--------------.
-  |      t_a: 04 |
-  |      t_b: 06 |
-  | t_equals: 0a |
-  |   t_plus: 08 |
-  | t_prompt: 00 |
-  '--------------'
+  Loaded examples/asm/example.asm as assembly.
+  ┌──────────┬─────────┐
+  │    Label │ Address │
+  ├──────────┼─────────┤
+  │      t_a │ 04      │
+  │      t_b │ 06      │
+  │ t_equals │ 0a      │
+  │   t_plus │ 08      │
+  │ t_prompt │ 00      │
+  └──────────┴─────────┘
   
   PC: 0c
  
-> <strong>dump</strong>
-           _0   _1   _2   _3   _4   _5   _6   _7   _8   _9   _a   _b   _c   _d   _e   _f
-%0 0000 0_ 496e 7075 7420 0000 413a 2000 423a 2000 202b 2000 203d 2000 7f00 bfc0 7f04 bfc0
-%1 0000 1_ a010 7f00 bfc0 7f06 bfc0 a110 1201 b010 7f08 bfc0 b110 7f0a bfc0 b210 b0b0 0000
-%2 0000 2_ 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
-%3 0000 3_ 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
-%4 0000 4_ 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
-%5 0000 5_ 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
-%6 0000 6_ 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
-%7 0000 7_ 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
-%8 0000 8_ 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
-%9 0000 9_ 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
-%a 0000 a_ 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
-%b 0000 b_ 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
-%c 0000 c_ 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
-%d 0000 d_ 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
-%e 0000 e_ 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
-%f 0000 f_ 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
-
-PC: 0c (0c)
-CIR: 7f00
- 
 > <strong>run</strong>
 .............................................................................. Run Started
-Input A: <strong>25</strong>
-Input B: <strong>-30</strong>
+Input A: 25
+Input B: -30
 25 + -30 = -5
 
 ................................................................................ Run Ended

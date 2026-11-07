@@ -35,6 +35,10 @@ def data_from_binary(path: str) -> tuple[int, list[int]]:
         data = f.read()
     pc, *data = data
     ram = list[int]()
+    if len(data) > 512:
+        raise ToyException("Invalid file size.")
+    if len(data) < 512:
+        data = [*data, *[0 for _ in range(512 - len(data))]]
     while data:
         b1, b2, *data = data
         ram.append((b1 << 8) + b2)
@@ -455,5 +459,9 @@ class Computer:
         data = [self._initial_pc]
         for w in self.ram:
             data.extend(w.as_bytes)
+        i = len(data) - 1
+        while data[i] == 0:
+            i -= 1
+        data = data[:i]
         with open(path, "wb") as f:
             f.write(bytes(data))

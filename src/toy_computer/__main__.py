@@ -73,18 +73,18 @@ if __name__ == "__main__":
         
   instructions        Display instruction set.
             
-  load [p]            Load a machine language or assembly language program from
+  load p              Load a machine language or assembly language program from
                       file p. File p should have extension .asm if assembly, .mc
                       if machine language, or no extension if a compiled binary.
 
-  build [p]           Compile current program to a binary file at path p.
+  build p             Compile current program to a binary file at path p.
           
   run                 Run the program from the current position.
           
-  dump [p]            Output the memory and register data. If a path is given,
+  dump (p)            Output the memory and register data. If path p is given,
                       save dump to path p.
           
-  machine [p]         Output the current state as machine language. If a path is
+  machine (p)         Output the current state as machine language. If path p is
                       given, save machine language to path p.
           
   step                Step through one fetch-decode-execute cycle.
@@ -93,16 +93,16 @@ if __name__ == "__main__":
           
   erase               Clear registers and memory.
           
-  format s d          Saves assembly file at path s as formatted html to path d. 
-          
-  quit                Quit.
-          
-  PC: {addr}          Set the program counter to address addr, where addr is a
+  format p q          Saves assembly file at path p as formatted html at path d. 
+                    
+  PC: addr            Set the program counter to address addr, where addr is a
                       hexadecimal byte (two nibble digits).
           
-  {addr}: {val}       Write value val to one-byte memory address addr, where addr
+  addr: val           Write value val to one-byte memory address addr, where addr
                       is a hexadecimal byte (two nibble digits) and val is a
                       hexadecimal word (four nibble digits).
+
+  quit                Quit.
               """
         )
 
@@ -220,6 +220,11 @@ Instructions:
                 except ValueError:
                     print("  * Error:")
                     print("  Expecting a binary file.")
+                    return False
+                except ToyException as e:
+                    print("  * Error:")
+                    print(f"  {e.message}")
+                    return False
             return True
 
         def run_program():
