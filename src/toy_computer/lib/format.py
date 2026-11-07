@@ -1,5 +1,5 @@
-from .language import EXPRESSIONS, STRING_EXPRESSION
 from .exception import ToyException
+from .language import EXPRESSIONS, STRING_EXPRESSION
 
 
 def keyword(k: str) -> str:
@@ -10,9 +10,7 @@ def format_assembly(assembly: str) -> str:
 
     result = list[str]()
 
-    lines = [
-        stripped for line in assembly.split("\n") if (stripped := line.strip())
-    ]
+    lines = [stripped for line in assembly.split("\n") if (stripped := line.strip())]
 
     for line in lines:
         m = STRING_EXPRESSION.search(line)
@@ -25,9 +23,7 @@ def format_assembly(assembly: str) -> str:
         if "//" in line:
             line, *rest = line.split("//")
             line = line.strip()
-            comments = (
-                f'<span class="comment">// {" // ".join(rest).strip()}</span>'
-            )
+            comments = f'<span class="comment">// {" // ".join(rest).strip()}</span>'
         else:
             comments = ""
 
@@ -64,7 +60,7 @@ def format_assembly(assembly: str) -> str:
             t = m.group("t")
             result.append(
                 f'<span class="special">.input</span> '
-                f'[<span class="register">%{d}</span>] {comments}'
+                f'[<span class="register">%{t}</span>] {comments}'
             )
             continue
 
@@ -128,7 +124,7 @@ def format_assembly(assembly: str) -> str:
             t = m.group("t")
             result.append(
                 f'<span class="special">.input_u</span> '
-                f'[<span class="register">%{d}</span>] {comments}'
+                f'[<span class="register">%{t}</span>] {comments}'
             )
             continue
 
@@ -582,7 +578,7 @@ def format_assembly(assembly: str) -> str:
                 .toy_computer .value {
                     color: black;
                 }
-            
+
                 .toy_computer .string {
                     color: orangered;
                 }
@@ -590,24 +586,24 @@ def format_assembly(assembly: str) -> str:
                 .toy_computer .sl_comment {
                     line-height: 0.4em;
                 }
-            
+
                 .toy_computer .comment {
                     color: gray;
                 }
-            
+
                 .toy_computer .label {
                     color: green;
                 }
-            
+
                 .toy_computer .keyword {
                     color: blue;
                     font-weight: bold;
                 }
-            
+
                 .toy_computer .special {
                     color: blue;
                 }
-            
+
                 .toy_computer .register {
                     color: darkviolet;
                 }

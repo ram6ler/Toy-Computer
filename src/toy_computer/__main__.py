@@ -2,13 +2,13 @@ if __name__ == "__main__":
     from re import split
     from sys import argv
 
-    from .lib.exception import ToyException
-    from .lib.computer import Computer
-    from .lib.assembler import assemble
-    from .lib.format import format_assembly
-
     from prompt_toolkit import PromptSession
-    from prompt_toolkit.completion import PathCompleter, NestedCompleter
+    from prompt_toolkit.completion import NestedCompleter, PathCompleter
+
+    from .lib.assembler import assemble
+    from .lib.computer import Computer
+    from .lib.exception import ToyException
+    from .lib.format import format_assembly
 
     ComputerCompleter = NestedCompleter(
         {
@@ -41,7 +41,7 @@ if __name__ == "__main__":
                       │   │  │  └─┘  │└─┐   ┌─┘
                       │   │  │       │  │   │
                       └───┘  └───────┘  └───┘
-                   C   O   M   P   U   T   E   R 
+                   C   O   M   P   U   T   E   R
           """
         )
         print(
@@ -68,36 +68,36 @@ if __name__ == "__main__":
         print(
             r"""
   To use:
-        
+
   help                Display this help message.
-        
+
   instructions        Display instruction set.
-            
+
   load p              Load a machine language or assembly language program from
                       file p. File p should have extension .asm if assembly, .mc
                       if machine language, or no extension if a compiled binary.
 
   build p             Compile current program to a binary file at path p.
-          
+
   run                 Run the program from the current position.
-          
+
   dump (p)            Output the memory and register data. If path p is given,
                       save dump to path p.
-          
+
   machine (p)         Output the current state as machine language. If path p is
                       given, save machine language to path p.
-          
+
   step                Step through one fetch-decode-execute cycle.
-          
+
   clear               Reset computer to original loaded state.
-          
+
   erase               Clear registers and memory.
-          
-  format p q          Saves assembly file at path p as formatted html at path d. 
-                    
+
+  format p q          Saves assembly file at path p as formatted html at path d.
+
   PC: addr            Set the program counter to address addr, where addr is a
                       hexadecimal byte (two nibble digits).
-          
+
   addr: val           Write value val to one-byte memory address addr, where addr
                       is a hexadecimal byte (two nibble digits) and val is a
                       hexadecimal word (four nibble digits).
@@ -116,7 +116,7 @@ Instruction structure:
  │  OPCODE   │     D     │         ADDR          │
  └──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┴──┘
 Instructions:
- ┌────────┬─────────────────┬───────────────────────┐   
+ ┌────────┬─────────────────┬───────────────────────┐
  │ Opcode │ Description     │ Pseudocode            │
  ├────────┼─────────────────┼───────────────────────┤
  │ 0      │ Halt            │ Halt                  │
@@ -137,7 +137,7 @@ Instructions:
  │ F      │ Jump & Link     │ R[D] ← PC; PC ← ADDR  │
  └────────┴─────────────────┴───────────────────────┘
  Load Indirect (A) Extensions:
- ┌───┬─────────────────────────────────────┐ 
+ ┌───┬─────────────────────────────────────┐
  │ S │ Description                         │
  ├───┼─────────────────────────────────────┤
  │ 0 │ Load Indirect (default)             │
@@ -147,7 +147,7 @@ Instructions:
  │ 4 │ R[D] ← random word                  │
  └───┴─────────────────────────────────────┘
  Store Indirect (B) Extensions:
- ┌───┬───────────────────────────────────────────┐ 
+ ┌───┬───────────────────────────────────────────┐
  │ S │ Description                               │
  ├───┼───────────────────────────────────────────┤
  │ 0 │ Store Indirect (default)                  │
@@ -242,10 +242,16 @@ Instructions:
                 print(f"  * Error\n  {e.message}")
 
         while True:
-            instruction = session.prompt(
-                "\n> ",
-                completer=ComputerCompleter,
-            )
+            try:
+                instruction = session.prompt(
+                    "\n> ",
+                    completer=ComputerCompleter,
+                )
+            except EOFError:
+                print("\n\n  So long!\n")
+                exit()
+            except KeyboardInterrupt:
+                continue
             match split(r" +", instruction.strip()):
                 case ["help"] | ["h"]:
                     show_help()
@@ -262,10 +268,10 @@ Instructions:
                         print(f"Binary saved to {path}")
                     except FileNotFoundError:
                         print(f"  File '{path}' not found...")
-                        return False
                     except IsADirectoryError:
                         print(f"  '{path}' is a directory...")
-                        return False
+                    except PermissionError:
+                        print(f"  Permission denied: '{path}'...")
 
                 case ["clear"] | ["c"]:
                     computer.clear()
@@ -298,22 +304,35 @@ Instructions:
 
                 case ["dump", *rest] | ["d", *rest]:
                     if rest:
-                        with open(rest[0], "w") as f:
-                            f.write(computer.dump)
-                        print(f"  Dump written to {rest[0]}.")
+                        try:
+                            with open(rest[0], "w") as f:
+                                f.write(computer.dump)
+                            print(f"  Dump written to {rest[0]}.")
+                        except (
+                            FileNotFoundError,
+                            IsADirectoryError,
+                            PermissionError,
+                        ) as e:
+                            print(f"  * Error: {e}")
                     else:
                         print(computer.dump)
 
                 case ["machine", *rest] | ["m", *rest]:
                     if rest:
-                        with open(rest[0], "w") as f:
-                            f.write(computer.breakdown)
-                        print(f"  State written to {rest[0]}.")
+                        try:
+                            with open(rest[0], "w") as f:
+                                f.write(computer.breakdown)
+                            print(f"  State written to {rest[0]}.")
+                        except (
+                            FileNotFoundError,
+                            IsADirectoryError,
+                            PermissionError,
+                        ) as e:
+                            print(f"  * Error: {e}")
                     else:
                         print(
                             "\n".join(
-                                f"  {line}"
-                                for line in computer.breakdown.split("\n")
+                                f"  {line}" for line in computer.breakdown.split("\n")
                             )
                         )
 
@@ -326,7 +345,9 @@ Instructions:
                                 f.write(format_assembly(code))
                             print(f"  Written to {path_dst}.")
                         except FileNotFoundError:
-                            print(f"  * Error\nFile '{load_path}' not found.")
+                            print(f"  * Error\nFile '{path_src}' not found.")
+                        except (IsADirectoryError, PermissionError) as e:
+                            print(f"  * Error: {e}")
                     else:
                         print("  Expecting .asm in assembly file name...")
 
@@ -369,9 +390,7 @@ Instructions:
                             )
                             continue
                         if v < 0 or v > 0xFFFF:
-                            print(
-                                f"  Value {hex(v)} cannot be stored in two bytes..."
-                            )
+                            print(f"  Value {hex(v)} cannot be stored in two bytes...")
                             continue
                         print(
                             f"  M[{hex(a)[2:].rjust(2, '0')}] "
@@ -388,9 +407,7 @@ Instructions:
                         )
 
                 case _:
-                    print(
-                        "  Not understood. Input 'help' for available instructions."
-                    )
+                    print("  Not understood. Input 'help' for available instructions.")
 
     if len(argv) == 1:
         try:

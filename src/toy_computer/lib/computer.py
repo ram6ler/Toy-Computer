@@ -1,9 +1,11 @@
 from __future__ import annotations
+
 import re
 from random import randrange
-from .word import Word
+
 from .exception import ToyException
 from .helpers import stdin_get_int, stdin_get_int_u, strip_hex
+from .word import Word
 
 
 def data_from_machine_code(code: str) -> tuple[int, list[int]]:
@@ -181,9 +183,7 @@ class Computer:
                     # Extension: stdin
                     case 0x1:
                         # input
-                        response = Word.make_from_signed_value(
-                            stdin_get_int()
-                        ).as_bytes
+                        response = Word.make_from_signed_value(stdin_get_int()).as_bytes
                         self.registers[d].update(response)
 
                     case 0x2:
@@ -221,7 +221,7 @@ class Computer:
                                 b = ord(string[k]) & 0xFF
                             self.ram[i].update(bytes([a, b]))
                             i += 1
-                            if i > 256:
+                            if i >= 256:
                                 raise ToyException(
                                     error_message(
                                         "Memory overflow while attempting "
@@ -234,9 +234,7 @@ class Computer:
                     case 0x4:
                         # rand
                         self.registers[d].update(
-                            Word.make_from_unsigned_value(
-                                randrange(2**16)
-                            ).as_bytes
+                            Word.make_from_unsigned_value(randrange(2**16)).as_bytes
                         )
 
                     case _:
@@ -257,13 +255,13 @@ class Computer:
                             raise ToyException(
                                 error_message(
                                     f"Attempted M[R[{strip_hex(t)}]] <- R[{strip_hex(d)}] "
-                                    f"where R[{strip_hex(t)}] = {hex(t)}."
+                                    f"where R[{strip_hex(t)}] = {hex(i)}."
                                 )
                             )
 
                         self.ram[i].update(self.registers[d].as_bytes)
 
-                        # Extension: stdout
+                    # Extension: stdout
                     case 0x1:
                         # den
                         print(value, end="")
@@ -313,9 +311,9 @@ class Computer:
                             chr(data & (0xFF)),
                         )
                         result = ""
-                        if first.isprintable:
+                        if first.isprintable():
                             result += first
-                        if second.isprintable:
+                        if second.isprintable():
                             result += second
                         print(result, end="")
 
@@ -413,9 +411,7 @@ class Computer:
         the values in the registers and the RAM.
         """
         result = ""
-        result += (
-            f"           {'   '.join(f'_{hex(i)[2:]}' for i in range(16))}\n"
-        )
+        result += f"           {'   '.join(f'_{hex(i)[2:]}' for i in range(16))}\n"
         for i in range(16):
             result += f"%{hex(i)[2:]} {self.registers[i]} {hex(i)[2:]}_ "
             result += " ".join(f"{self.ram[i * 16 + j]}" for j in range(16))
