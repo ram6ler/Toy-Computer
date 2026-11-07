@@ -180,14 +180,13 @@ Instructions:
                     with open(path) as f:
                         program = f.read()
                 except FileNotFoundError:
-                    print(f"  File '{path}' not found...")
+                    print(f"  * Error:\n  File '{path}' not found...")
                     return False
                 except IsADirectoryError:
-                    print(f"  '{path}' is a directory...")
+                    print(f"  *Error:\n  '{path}' is a directory...")
                     return False
                 except UnicodeDecodeError:
-                    print("  * Error:")
-                    print(f"  {path} is an invalid text file...")
+                    print(f"  * Error:\n  {path} is an invalid text file...")
                     return False
 
                 try:
@@ -209,8 +208,7 @@ Instructions:
                         print(f"  PC: {hex(computer.pc)[2:].rjust(2, '0')}")
                     return True
                 except ToyException as e:
-                    print("  * Error:")
-                    print(f"  {e.message}")
+                    print(f"  * Error:\n  {e.message}")
                     return False
             else:
                 try:
@@ -218,12 +216,10 @@ Instructions:
                     computer.load(t.breakdown)
                     print(f"  Loaded {path} as compiled binary.")
                 except ValueError:
-                    print("  * Error:")
-                    print("  Expecting a binary file.")
+                    print("  * Error:\n  Expecting a binary file.")
                     return False
                 except ToyException as e:
-                    print("  * Error:")
-                    print(f"  {e.message}")
+                    print(f"  * Error:\n  {e.message}")
                     return False
             return True
 
@@ -241,18 +237,30 @@ Instructions:
                 print()
                 print(f"  * Error\n  {e.message}")
 
+        no_line = False
         while True:
             try:
                 instruction = session.prompt(
-                    "\n> ",
+                    f"{'' if no_line else '\n'}> ",
                     completer=ComputerCompleter,
                 )
+                no_line = False
             except EOFError:
                 print("\n\n  So long!\n")
                 exit()
             except KeyboardInterrupt:
+                instruction = input("  Quit? ").strip().lower()
+                if not instruction or instruction[0] == "n":
+                    continue
+                else:
+                    print("\n  So long!\n")
+                    break
+
+            instruction = instruction.strip()
+            if not instruction or instruction[0] == ";":
+                no_line = True
                 continue
-            match split(r" +", instruction.strip()):
+            match split(r" +", instruction):
                 case ["help"] | ["h"]:
                     show_help()
 
@@ -267,11 +275,11 @@ Instructions:
                         computer.save_as_binary(path)
                         print(f"Binary saved to {path}.")
                     except FileNotFoundError:
-                        print(f"  File '{path}' not found...")
+                        print(f"  * Error:\n  File '{path}' not found...")
                     except IsADirectoryError:
-                        print(f"  '{path}' is a directory...")
+                        print(f"  * Error:\n  '{path}' is a directory...")
                     except PermissionError:
-                        print(f"  Permission denied: '{path}'...")
+                        print(f"  * Error:\n  Permission denied: '{path}'...")
 
                 case ["clear"] | ["c"]:
                     computer.clear()
@@ -300,7 +308,7 @@ Instructions:
                             lineate("Step Ended")
 
                     except ToyException as e:
-                        print(f"  * Error: {e.message}")
+                        print(f"  * Error:\n  {e.message}")
 
                 case ["dump", *rest] | ["d", *rest]:
                     if rest:
@@ -313,7 +321,7 @@ Instructions:
                             IsADirectoryError,
                             PermissionError,
                         ) as e:
-                            print(f"  * Error: {e}")
+                            print(f"  * Error:\n  {e}")
                     else:
                         print(computer.dump)
 
@@ -328,7 +336,7 @@ Instructions:
                             IsADirectoryError,
                             PermissionError,
                         ) as e:
-                            print(f"  * Error: {e}")
+                            print(f"  * Error:\n  {e}")
                     else:
                         print(
                             "\n".join(
@@ -346,9 +354,9 @@ Instructions:
                                 f.write(format_assembly(code))
                             print(f"  Written to {path_dst}.")
                         except FileNotFoundError:
-                            print(f"  * Error\nFile '{path_src}' not found.")
+                            print(f"  * Error\n  File '{path_src}' not found.")
                         except (IsADirectoryError, PermissionError) as e:
-                            print(f"  * Error: {e}")
+                            print(f"  * Error:\n  {e}")
                     else:
                         print("  Expecting .asm in assembly file name...")
 
@@ -364,10 +372,10 @@ Instructions:
                                 print("  Expecting a one-byte value...")
                             else:
                                 computer.reset_pc(a)
-                                print(f"PC <- {hex(a)[2:].rjust(2, '0')}")
+                                print(f"PC ← {hex(a)[2:].rjust(2, '0')}")
                         except ValueError:
                             print(
-                                "  Not understood. "
+                                "  * Error:\n  Not understood. "
                                 "Input 'help' for available instructions."
                             )
                     else:
@@ -375,43 +383,56 @@ Instructions:
                             a = int(sa.replace(":", ""), 16)
                         except ValueError:
                             print(
-                                "  Not understood. "
+                                "  * Error:\n  Not understood. "
                                 "Input 'help' for available instructions."
                             )
                             continue
                         if a < 0 or a > 0xFF:
-                            print("  Addresses range from 00 to ff...")
+                            print(
+                                "  *Error:\n  Addresses range from 00 to ff..."
+                            )
                             continue
                         try:
                             v = int(sv, 16)
                         except ValueError:
                             print(
-                                "  Not understood. "
+                                "  * Error:\n  Not understood. "
                                 "Input 'help' for available instructions."
                             )
                             continue
                         if v < 0 or v > 0xFFFF:
                             print(
-                                f"  Value {hex(v)} cannot be stored in two bytes..."
+                                f"  * Error:\n  Value {hex(v)} cannot be stored in two bytes..."
                             )
                             continue
                         print(
                             f"  M[{hex(a)[2:].rjust(2, '0')}] "
-                            f"{computer.ram[a]} -> "
-                            f"{hex(v)[2:].rjust(4, '0')}"
+                            f"← {hex(v)[2:].rjust(4, '0')} "
+                            f" ({computer.ram[a]})"
                         )
                         left_byte = (v & 0xFF00) >> 8
                         right_byte = v & 0xFF
                         computer.ram[a].update(bytes([left_byte, right_byte]))
+                        bits = computer.ram[a].binary.rjust(16, "0")
+                        bits = " ".join(
+                            [
+                                bits[0:4],
+                                bits[4:8],
+                                bits[8:12],
+                                bits[12:16],
+                            ]
+                        )
                         print(
-                            f"  ascii:      {computer.ram[a].characters}\n"
-                            f"  value:      {computer.ram[a].value}\n"
-                            f"  pseudocode: {computer.ram[a].pseudocode}"
+                            f"  Bits:         {bits}\n"
+                            f"  ASCII:        {computer.ram[a].characters}\n"
+                            f"  Value:        {computer.ram[a].value:,}\n"
+                            f"  Pseudocode:   {computer.ram[a].pseudocode}"
                         )
 
                 case _:
                     print(
-                        "  Not understood. Input 'help' for available instructions."
+                        "  Not understood. "
+                        "Input 'help' for available instructions."
                     )
 
     if len(argv) == 1:
@@ -425,7 +446,7 @@ Instructions:
                 with open(argv[1]) as f:
                     code = f.read()
             except FileNotFoundError:
-                print(f"  File '{argv[1]}' not found...")
+                print(f"  * Error:\n File '{argv[1]}' not found...")
                 exit()
 
             computer = Computer()

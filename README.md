@@ -676,7 +676,7 @@ $ python -m toy_computer
                       │   │  │  └─┘  │└─┐   ┌─┘
                       │   │  │       │  │   │
                       └───┘  └───────┘  └───┘
-                   C   O   M   P   U   T   E   R 
+                   C   O   M   P   U   T   E   R
           
 
   Welcome to Toy Computer, an implementation of an imaginary computer
@@ -696,90 +696,57 @@ $ python -m toy_computer
     https://github.com/ram6ler/Toy-Computer
 
  
-> <strong>help</strong>
-
-  To use:
-        
-  help                Display this help message.
-        
-  instructions        Display instruction set.
-            
-  load p              Load a machine language or assembly language program from
-                      file p. File p should have extension .asm if assembly, .mc
-                      if machine language, or no extension if a compiled binary.
-
-  build p             Compile current program to a binary file at path p.
-          
-  run                 Run the program from the current position.
-          
-  dump (p)            Output the memory and register data. If path p is given,
-                      save dump to path p.
-          
-  machine (p)         Output the current state as machine language. If path p is
-                      given, save machine language to path p.
-          
-  step                Step through one fetch-decode-execute cycle.
-          
-  clear               Reset computer to original loaded state.
-          
-  erase               Clear registers and memory.
-          
-  format p q          Saves assembly file at path p as formatted html at path d. 
-                    
-  PC: addr            Set the program counter to address addr, where addr is a
-                      hexadecimal byte (two nibble digits).
-          
-  addr: val           Write value val to one-byte memory address addr, where addr
-                      is a hexadecimal byte (two nibble digits) and val is a
-                      hexadecimal word (four nibble digits).
-
-  quit                Quit.
-              
- 
 > <strong>00: 4865</strong>
-  M[00] 0000 -> 4865
-  ascii:      He
-  value:      18533
-  pseudocode: R[8] <- R[6] ^ R[5]
+  M[00] ← 4865  (0000)
+  Bits:         0100 1000 0110 0101
+  ASCII:        He
+  Value:        18,533
+  Pseudocode:   R[8] <- R[6] ^ R[5]
  
 > <strong>01: 6c6c</strong>
-  M[01] 0000 -> 6c6c
-  ascii:      ll
-  value:      27756
-  pseudocode: R[c] <- R[6] >> R[c]
+  M[01] ← 6c6c  (0000)
+  Bits:         0110 1100 0110 1100
+  ASCII:        ll
+  Value:        27,756
+  Pseudocode:   R[c] <- R[6] >> R[c]
  
 > <strong>02: 6f21</strong>
-  M[02] 0000 -> 6f21
-  ascii:      o!
-  value:      28449
-  pseudocode: R[f] <- R[2] >> R[1]
+  M[02] ← 6f21  (0000)
+  Bits:         0110 1111 0010 0001
+  ASCII:        o!
+  Value:        28,449
+  Pseudocode:   R[f] <- R[2] >> R[1]
  
 > <strong>03: 0000</strong>
-  M[03] 0000 -> 0000
-  ascii:      ◻◻
-  value:      0
-  pseudocode: halt
+  M[03] ← 0000  (0000)
+  Bits:         0000 0000 0000 0000
+  ASCII:        ◻◻
+  Value:        0
+  Pseudocode:   halt
  
 > <strong>04: 7a00</strong>
-  M[04] 0000 -> 7a00
-  ascii:      z◻
-  value:      31232
-  pseudocode: R[a] <- 00
+  M[04] ← 7a00  (0000)
+  Bits:         0111 1010 0000 0000
+  ASCII:        z◻
+  Value:        31,232
+  Pseudocode:   R[a] <- 00
  
 > <strong>05: bac0</strong>
-  M[05] 0000 -> bac0
-  ascii:      ºÀ
-  value:      -17728
-  pseudocode: stdout <- M[R[a]...]
+  M[05] ← bac0  (0000)
+  Bits:         1011 1010 1100 0000
+  ASCII:        ºÀ
+  Value:        -17,728
+  Pseudocode:   stdout <- M[R[a]...]
  
 > <strong>06: b0b0</strong>
-  M[06] 0000 -> b0b0
-  ascii:      °°
-  value:      -20304
-  pseudocode: stdout <- line
+  M[06] ← b0b0  (0000)
+  Bits:         1011 0000 1011 0000
+  ASCII:        °°
+  Value:        -20,304
+  Pseudocode:   stdout <- line
  
 > <strong>pc: 04</strong>
-PC <- 04
+PC ← 04
  
 > <strong>run</strong>
 .............................................................................. Run Started
@@ -801,18 +768,37 @@ Hello!
   
   PC: 0c
  
+> <strong>dump</strong>
+           _0   _1   _2   _3   _4   _5   _6   _7   _8   _9   _a   _b   _c   _d   _e   _f
+%0 0000 0_ 496e 7075 7420 0000 413a 2000 423a 2000 202b 2000 203d 2000 7f00 bfc0 7f04 bfc0
+%1 0000 1_ a010 7f00 bfc0 7f06 bfc0 a110 1201 b010 7f08 bfc0 b110 7f0a bfc0 b210 b0b0 0000
+%2 0000 2_ 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
+%3 0000 3_ 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
+%4 0000 4_ 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
+%5 0000 5_ 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
+%6 0000 6_ 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
+%7 0000 7_ 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
+%8 0000 8_ 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
+%9 0000 9_ 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
+%a 0000 a_ 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
+%b 0000 b_ 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
+%c 0000 c_ 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
+%d 0000 d_ 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
+%e 0000 e_ 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
+%f 0000 f_ 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
+
+PC: 0c (0c)
+CIR: 7f00
+ 
 > <strong>run</strong>
 .............................................................................. Run Started
-Input A: 25
-Input B: -30
+Input A: <strong>25</strong>
+Input B: <strong>-30</strong>
 25 + -30 = -5
 
 ................................................................................ Run Ended
  
-> <strong>quit</strong>
-
-
-  So long!
+>
 </pre>
 
 ## Examples
@@ -1056,8 +1042,8 @@ Binary saved to dice.
 
 In the root directory, we can now examine the generated binary file, for example, using `xxd`:
 
-```
-% xxd dice                    
+<pre>
+% <strong>xxd dice</strong>
 00000000: af2e 2d2d 2d2e 007c 2020 207c 007c 6f20  ..---..|   |.|o 
 00000010: 207c 007c 6f20 6f7c 007c 2020 6f7c 007c   |.|o o|.|  o|.|
 00000020: 206f 207c 0027 2d2d 2d27 0000 0000 0300   o |.'---'......
@@ -1090,7 +1076,7 @@ In the root directory, we can now examine the generated binary file, for example
 000001d0: 0f7f 0110 0f4f 01cf f07f adb0 0f7f c5ef  .....O..........
 000001e0: 00b0 b07f 43bf c07f aea0 0fb0 107f 47bf  ....C.........G.
 000001f0: c07f 49a0 0fb0 10b0 b0                   ..I......
-```
+</pre>
 
 And we can load and run the binary file in the REPL:
 
@@ -1131,11 +1117,11 @@ Score: 1 / 2
 
 Or run the binary file directly:
 
-```
-% python3 -m toy_computer dice
+<pre>
+% <strong>python3 -m toy_computer dice</strong>
 Dice!
-How many problems? 2
-How many dice? 3
+How many problems? <strong>2</strong>
+How many dice? <strong>3</strong>
 
 Problem: 1
 .---..---..---.
@@ -1143,7 +1129,7 @@ Problem: 1
 | o || o ||   |
 |o o||o o||o o|
 '---''---''---'
-Sum? 14
+Sum? <strong>14</strong>
 Good!
 
 Problem: 2
@@ -1152,12 +1138,12 @@ Problem: 2
 |o o|| o || o |
 |o o||   ||   |
 '---''---''---'
-Sum? 9
+Sum? <strong>9</strong>
 Wrong!
 
 Score: 1 / 2
 %
-```
+</pre>
 
 
 ## Thanks
