@@ -435,21 +435,32 @@ class Computer:
         Returns a breakdown of the values in the RAM, including
         interpretations as ascii, values and instructions.
         """
-        result = f"PC: {hex(self.pc)[2:].rjust(2, '0')}\n"
+        result = (
+            f"PC: {hex(self.pc)[2:].rjust(2, '0')};   "
+            f"{'Bits'.ljust(21)}"
+            f"{'Value'.rjust(9)}   "
+            f"ASCII   Instruction\n"
+        )
         for i, data in enumerate(self.ram):
             if data == Word.make_from_unsigned_value(0):
                 continue
             r = self.ram[i]
             addr = hex(i)[2:].rjust(2, "0")
             data = str(self.ram[i])
-            binary = r.binary
+            binary = (
+                f"{r.binary[0:4]} "
+                f"{r.binary[4:8]} "
+                f"{r.binary[8:12]} "
+                f"{r.binary[12:16]}"
+            )
             value = r.value
             characters = r.characters
             pseudocode = r.pseudocode
             result += (
-                f"{addr}: {data}; {binary} "
-                f"{f'{value:,} '.rjust(8)}"
-                f"{characters} {pseudocode}"
+                f"{addr}: {data}; {binary} │ "
+                f"{f'{value:,}'.rjust(8)} │ "
+                f"{characters.ljust(5)} │ "
+                f"{pseudocode}"
             )
             if i == self.pc:
                 result += " (*)"
